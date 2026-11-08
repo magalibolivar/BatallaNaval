@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{AB111111-1111-4111-9111-111111111110}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <RootNamespace>GUI</RootNamespace>
+    <AssemblyName>GUI</AssemblyName>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <Deterministic>true</Deterministic>
+    <ApplicationIcon>Recursos\BatallaNaval.ico</ApplicationIcon>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Program.cs" />
+    <Compile Include="Branding.cs" />
+    <Compile Include="RecursosNaves.cs" />
+    <Compile Include="FormLogin.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormLogin.Designer.cs">
+      <DependentUpon>FormLogin.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormRegistro.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormRegistro.Designer.cs">
+      <DependentUpon>FormRegistro.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormPrincipal.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormPrincipal.Designer.cs">
+      <DependentUpon>FormPrincipal.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormPartida.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormPartida.Designer.cs">
+      <DependentUpon>FormPartida.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormPasoTurno.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormPasoTurno.Designer.cs">
+      <DependentUpon>FormPasoTurno.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormAbandonar.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormAbandonar.Designer.cs">
+      <DependentUpon>FormAbandonar.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormEstadisticas.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormEstadisticas.Designer.cs">
+      <DependentUpon>FormEstadisticas.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormMovimientos.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormMovimientos.Designer.cs">
+      <DependentUpon>FormMovimientos.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormReglas.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormReglas.Designer.cs">
+      <DependentUpon>FormReglas.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ucCelda.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ucCelda.Designer.cs">
+      <DependentUpon>ucCelda.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ucColocacion.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ucColocacion.Designer.cs">
+      <DependentUpon>ucColocacion.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ucCombate.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ucCombate.Designer.cs">
+      <DependentUpon>ucCombate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+    <Content Include="Recursos\BatallaNaval.ico" />
+    <Content Include="Recursos\Icono.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Recursos\Nave_BatallaNaval.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Recursos\Nave_Portaaviones.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Recursos\Nave_Fragatas.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Recursos\Nave_Buque.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Recursos\Nave_Acorazados.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\BE\BE.csproj">
+      <Project>{AB111111-1111-4111-9111-111111111101}</Project>
+      <Name>BE</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\BLL\BLL.csproj">
+      <Project>{AB111111-1111-4111-9111-111111111103}</Project>
+      <Name>BLL</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>
