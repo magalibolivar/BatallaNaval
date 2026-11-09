@@ -13,7 +13,7 @@ namespace GUI
             base.Dispose(disposing);
         }
 
-        // Disposición (basada en el mockup stitch_batalla_naval_winforms_ui/partida_en_curso):
+        // Disposición (basada en el mockup de diseño):
         // banner de turno arriba, "Mi flota" a la izquierda, columna central con el resultado
         // del disparo / flota rival / registro, y el radar enemigo a la derecha.
         public static readonly System.Drawing.Point OrigenTableroPropio = new System.Drawing.Point(20, 106);

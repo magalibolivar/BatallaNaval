@@ -13,7 +13,7 @@ namespace GUI
             base.Dispose(disposing);
         }
 
-        // Disposición (basada en stitch_batalla_naval_winforms_ui/colocaci_n_de_naves):
+        // Disposición (basada en el mockup de diseño):
         // banner con el jugador que coloca, tablero a la izquierda y, a la derecha, las
         // herramientas (girar / al azar / reiniciar), la flota con su estado y "Confirmar flota".
         public static readonly System.Drawing.Point OrigenTablero = new System.Drawing.Point(24, 86);

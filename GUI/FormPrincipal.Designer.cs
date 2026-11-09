@@ -13,7 +13,7 @@ namespace GUI
             base.Dispose(disposing);
         }
 
-        // Disposición (basada en stitch_batalla_naval_winforms_ui/men_principal): a la
+        // Disposición (basada en el mockup de diseño): a la
         // izquierda los 2 jugadores con sus estadísticas y el botón para comenzar; a la
         // derecha las últimas partidas del Jugador 1; abajo las acciones secundarias.
         private const int X_IZQ = 25;

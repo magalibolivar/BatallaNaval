@@ -13,7 +13,7 @@ namespace GUI
             base.Dispose(disposing);
         }
 
-        // Disposición (basada en stitch_batalla_naval_winforms_ui/inicio_de_sesi_n): logo y
+        // Disposición (basada en el mockup de diseño): logo y
         // título centrados, campos en recuadros redondeados con texto de ayuda adentro,
         // "Ingresar" y, debajo de un separador, "Jugar como invitado" y el registro.
         private const int X_CAMPOS = 40;
