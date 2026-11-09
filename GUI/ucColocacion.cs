@@ -64,7 +64,7 @@ namespace GUI
             this.idJugador = idJugador;
 
             BE.USUARIO jugador = idJugador == partidaBLL.Jugador1.ID ? partidaBLL.Jugador1 : partidaBLL.Jugador2;
-            lblTitulo.Text = "Colocación de naves — " + jugador.Nombre;
+            lblTitulo.Text = "Colocación de naves: " + jugador.Nombre;
             lblIndicacion.Text = "Elegí una nave, apuntá en el tablero y hacé click para colocarla.";
 
             ConstruirTablero();

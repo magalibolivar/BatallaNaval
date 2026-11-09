@@ -93,7 +93,7 @@ namespace GUI
                     Tuple<int, int> cara = estadisticaBLL.Enfrentamientos(jugador1, jugador2);
                     lblCaraACara.Text = cara.Item1 + cara.Item2 == 0
                         ? "Primera partida entre " + jugador1.Nombre + " y " + jugador2.Nombre
-                        : "Cara a cara:  " + jugador1.Nombre + "  " + cara.Item1 + " – " + cara.Item2 + "  " + jugador2.Nombre;
+                        : "Cara a cara:  " + jugador1.Nombre + "  " + cara.Item1 + " - " + cara.Item2 + "  " + jugador2.Nombre;
                 }
                 else
                 {

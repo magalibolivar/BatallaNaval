@@ -42,7 +42,7 @@ namespace GUI
 
             rutaXml = partida.RutaXml;
             tituloMovimientos = "Partida del " + partida.FechaInicio.ToString("dd/MM/yyyy HH:mm") +
-                " — " + jugador1.Nombre + " vs " + jugador2.Nombre;
+                ": " + jugador1.Nombre + " vs " + jugador2.Nombre;
         }
 
         private void btnVerMovimientos_Click(object sender, EventArgs e)

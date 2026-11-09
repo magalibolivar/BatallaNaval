@@ -352,8 +352,8 @@ namespace GUI
             BE.DISPARO ultimoPropio = disparos.FindLast(d => d.IdAtacante == idVista);
             BE.DISPARO ultimoRival = disparos.FindLast(d => d.IdAtacante == idRival);
 
-            lblHeaderPropio.Text = "Mi flota — " + NombreDe(idVista);
-            lblHeaderEnemigo.Text = "Radar enemigo — " + NombreDe(idRival);
+            lblHeaderPropio.Text = "Mi flota: " + NombreDe(idVista);
+            lblHeaderEnemigo.Text = "Radar enemigo: " + NombreDe(idRival);
 
             int tam = BLL.PARTIDA.TAMAÑO_TABLERO;
 
@@ -396,7 +396,7 @@ namespace GUI
 
         private void RefrescarFlotaRival(int idRival)
         {
-            // Corto a propósito: con nombres largos "— 4/5 naves a flote" no entraba en la columna central.
+            // Corto a propósito: con nombres largos "4/5 naves a flote" no entraba en la columna central.
             int aFlote = BE.TIPONAVE.Flota.Length - partidaBLL.NavesHundidas(idRival).Count;
             lblFlotaRival.Text = "Flota de " + NombreDe(idRival) + " · " + aFlote + "/" + BE.TIPONAVE.Flota.Length + " a flote";
             List<BE.TIPONAVE> hundidas = partidaBLL.NavesHundidas(idRival);

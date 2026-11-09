@@ -233,7 +233,7 @@ namespace GUI
             }
         }
 
-        // Línea — o — entre "Ingresar" y "Jugar como invitado".
+        // Línea con una "o" en el medio, entre "Ingresar" y "Jugar como invitado".
         private void lblSeparador_Paint(object sender, PaintEventArgs e)
         {
             Label separador = (Label)sender;

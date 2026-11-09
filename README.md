@@ -1,4 +1,4 @@
-# Batalla Naval — TP individual DAS (UAI)
+# Batalla Naval - TP individual DAS (UAI)
 
 Juego de Batalla Naval para 2 jugadores en la misma PC, en C# (Windows Forms, .NET Framework 4.7.2) con SQL Server, en arquitectura de 4 capas (BE / DAL / BLL / GUI).
 
