@@ -94,6 +94,9 @@ namespace BLL
             nueva.IdJugador1 = j1.ID;
             nueva.IdJugador2 = j2.ID;
             nueva.RutaXml = BLL.MOVIMIENTOXML.GenerarRuta();
+            // La base guarda su propio GETDATE(); este valor es el de la partida en memoria
+            // (lo usa FormResultado para la duración) y difiere del de la base en milisegundos.
+            nueva.FechaInicio = DateTime.Now;
 
             int id = mapper.Insertar(nueva);
             if (id == -1)
@@ -548,6 +551,9 @@ namespace BLL
             }
 
             fase = FASE_PARTIDA.Finalizada;
+            // Sin esto FechaFin quedaba null en memoria y FormResultado fallaba al terminar
+            // cualquier partida (la fecha solo se grababa en la base, con GETDATE()).
+            partida.FechaFin = DateTime.Now;
 
             BLL.MOVIMIENTOXML.RegistrarFin(partida.RutaXml, UsuarioDe(idGanador).Nombre, descripcion);
 

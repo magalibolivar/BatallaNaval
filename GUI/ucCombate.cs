@@ -90,8 +90,8 @@ namespace GUI
 
         private void ConstruirFlotaRival()
         {
-            fuenteNave = new Font("Montserrat", 8.5F);
-            fuenteNaveHundida = new Font("Montserrat", 8.5F, FontStyle.Strikeout);
+            fuenteNave = Fuentes.Montserrat(8.5F);
+            fuenteNaveHundida = Fuentes.Montserrat(8.5F, FontStyle.Strikeout);
 
             for (int i = 0; i < BE.TIPONAVE.Flota.Length; i++)
             {
@@ -116,7 +116,7 @@ namespace GUI
 
                 Label estado = new Label();
                 estado.AutoSize = false;
-                estado.Font = new Font("Montserrat", 8.5F, FontStyle.Bold);
+                estado.Font = Fuentes.Montserrat(8.5F, FontStyle.Bold);
                 estado.TextAlign = ContentAlignment.MiddleRight;
                 estado.Location = new Point(150, y);
                 estado.Size = new Size(78, 20);
@@ -396,7 +396,9 @@ namespace GUI
 
         private void RefrescarFlotaRival(int idRival)
         {
-            lblFlotaRival.Text = "Flota de " + NombreDe(idRival) + " — " + partidaBLL.ResumenFlota(idRival);
+            // Corto a propósito: con nombres largos "— 4/5 naves a flote" no entraba en la columna central.
+            int aFlote = BE.TIPONAVE.Flota.Length - partidaBLL.NavesHundidas(idRival).Count;
+            lblFlotaRival.Text = "Flota de " + NombreDe(idRival) + " · " + aFlote + "/" + BE.TIPONAVE.Flota.Length + " a flote";
             List<BE.TIPONAVE> hundidas = partidaBLL.NavesHundidas(idRival);
             foreach (BE.TIPONAVE tipo in BE.TIPONAVE.Flota)
             {

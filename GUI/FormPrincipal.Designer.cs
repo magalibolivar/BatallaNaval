@@ -96,7 +96,7 @@ namespace GUI
             this.SuspendLayout();
 
             this.BackColor = Branding.FondoVentana;
-            this.Font = new System.Drawing.Font("Montserrat", 9F);
+            this.Font = Fuentes.Montserrat(9F);
 
             // ---------- Encabezado ----------
             this.picLogo.Location = new System.Drawing.Point(X_IZQ, 12);
@@ -105,13 +105,13 @@ namespace GUI
             this.picLogo.Image = RecursosNaves.LogoBatallaNaval();
 
             this.lblTituloBatalla.AutoSize = true;
-            this.lblTituloBatalla.Font = new System.Drawing.Font("Montserrat", 13F, System.Drawing.FontStyle.Bold);
+            this.lblTituloBatalla.Font = Fuentes.Montserrat(13F, System.Drawing.FontStyle.Bold);
             this.lblTituloBatalla.ForeColor = Branding.TextoPrincipal;
             this.lblTituloBatalla.Location = new System.Drawing.Point(108, 12);
             this.lblTituloBatalla.Text = "BATALLA";
 
             this.lblTituloNaval.AutoSize = true;
-            this.lblTituloNaval.Font = new System.Drawing.Font("Montserrat", 19F, System.Drawing.FontStyle.Bold);
+            this.lblTituloNaval.Font = Fuentes.Montserrat(19F, System.Drawing.FontStyle.Bold);
             this.lblTituloNaval.ForeColor = Branding.Primario;
             this.lblTituloNaval.Location = new System.Drawing.Point(105, 34);
             this.lblTituloNaval.Text = "NAVAL";
@@ -123,7 +123,7 @@ namespace GUI
 
             // ---------- Jugadores ----------
             this.lblSeccionJugadores.AutoSize = true;
-            this.lblSeccionJugadores.Font = new System.Drawing.Font("Montserrat", 10F, System.Drawing.FontStyle.Bold);
+            this.lblSeccionJugadores.Font = Fuentes.Montserrat(10F, System.Drawing.FontStyle.Bold);
             this.lblSeccionJugadores.ForeColor = Branding.TextoPrincipal;
             this.lblSeccionJugadores.Location = new System.Drawing.Point(X_IZQ - 2, 94);
             this.lblSeccionJugadores.Text = "Jugadores";
@@ -137,7 +137,7 @@ namespace GUI
             this.btnLoginJugador2.FlatAppearance.BorderColor = Branding.Secundario;
             this.btnLoginJugador2.BackColor = Branding.Panel;
             this.btnLoginJugador2.ForeColor = Branding.Secundario;
-            this.btnLoginJugador2.Font = new System.Drawing.Font("Montserrat", 8.5F, System.Drawing.FontStyle.Bold);
+            this.btnLoginJugador2.Font = Fuentes.Montserrat(8.5F, System.Drawing.FontStyle.Bold);
             this.btnLoginJugador2.Text = "Ingresar";
             this.btnLoginJugador2.Click += new System.EventHandler(this.btnLoginJugador2_Click);
             this.pnlJugador2.Controls.Add(this.btnLoginJugador2);
@@ -151,7 +151,7 @@ namespace GUI
 
             this.btnComenzarPartida.Location = new System.Drawing.Point(X_IZQ, 288);
             this.btnComenzarPartida.Size = new System.Drawing.Size(ANCHO_IZQ, 46);
-            this.btnComenzarPartida.Font = new System.Drawing.Font("Montserrat", 12F, System.Drawing.FontStyle.Bold);
+            this.btnComenzarPartida.Font = Fuentes.Montserrat(12F, System.Drawing.FontStyle.Bold);
             this.btnComenzarPartida.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnComenzarPartida.FlatAppearance.BorderSize = 0;
             this.btnComenzarPartida.BackColor = Branding.Primario;
@@ -161,14 +161,14 @@ namespace GUI
 
             this.lblAyudaComenzar.AutoSize = false;
             this.lblAyudaComenzar.ForeColor = Branding.Secundario;
-            this.lblAyudaComenzar.Font = new System.Drawing.Font("Montserrat", 8.5F);
+            this.lblAyudaComenzar.Font = Fuentes.Montserrat(8.5F);
             this.lblAyudaComenzar.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.lblAyudaComenzar.Location = new System.Drawing.Point(X_IZQ, 337);
             this.lblAyudaComenzar.Size = new System.Drawing.Size(ANCHO_IZQ, 20);
 
             // ---------- Últimas partidas ----------
             this.lblSeccionHistorial.AutoSize = true;
-            this.lblSeccionHistorial.Font = new System.Drawing.Font("Montserrat", 10F, System.Drawing.FontStyle.Bold);
+            this.lblSeccionHistorial.Font = Fuentes.Montserrat(10F, System.Drawing.FontStyle.Bold);
             this.lblSeccionHistorial.ForeColor = Branding.TextoPrincipal;
             this.lblSeccionHistorial.Location = new System.Drawing.Point(X_DER - 2, 94);
 
@@ -259,24 +259,24 @@ namespace GUI
             avatar.Location = new System.Drawing.Point(12, 12);
             avatar.Size = new System.Drawing.Size(40, 40);
             avatar.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            avatar.Font = new System.Drawing.Font("Montserrat", 14F, System.Drawing.FontStyle.Bold);
+            avatar.Font = Fuentes.Montserrat(14F, System.Drawing.FontStyle.Bold);
             avatar.ForeColor = System.Drawing.Color.White;
             avatar.BackColor = Branding.Panel;
             avatar.Paint += new System.Windows.Forms.PaintEventHandler(this.DibujarAvatar);
 
             nombre.AutoSize = true;
-            nombre.Font = new System.Drawing.Font("Montserrat", 11F, System.Drawing.FontStyle.Bold);
+            nombre.Font = Fuentes.Montserrat(11F, System.Drawing.FontStyle.Bold);
             nombre.ForeColor = Branding.TextoPrincipal;
             nombre.Location = new System.Drawing.Point(60, 9);
 
             chip.AutoSize = false;
-            chip.Font = new System.Drawing.Font("Montserrat", 8F, System.Drawing.FontStyle.Bold);
+            chip.Font = Fuentes.Montserrat(8F, System.Drawing.FontStyle.Bold);
             chip.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             chip.Location = new System.Drawing.Point(200, 8);
             chip.Size = new System.Drawing.Size(128, 18);
 
             stats.AutoSize = true;
-            stats.Font = new System.Drawing.Font("Montserrat", 8.5F);
+            stats.Font = Fuentes.Montserrat(8.5F);
             stats.ForeColor = Branding.Secundario;
             stats.Location = new System.Drawing.Point(61, 36);
 

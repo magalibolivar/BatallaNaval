@@ -843,6 +843,34 @@ namespace Tests.Unitarios
         }
 
         [TestMethod]
+        public void Fechas_SeCompletanEnMemoriaAlIniciarYAlFinalizar()
+        {
+            // Regresión: FechaInicio/FechaFin solo se grababan en la base (GETDATE()), así que
+            // en memoria FechaFin quedaba null y FormResultado fallaba al terminar cada partida.
+            DateTime antes = DateTime.Now;
+            partida.Iniciar(ana, beto);
+            Assert.IsTrue(partida.Partida.FechaInicio >= antes && partida.Partida.FechaInicio <= DateTime.Now);
+            Assert.IsNull(partida.Partida.FechaFin);
+
+            BE.PARTIDA alFinalizar = null;
+            partida.PartidaFinalizada += (p, abandonada) => alFinalizar = p;
+            partida.Abandonar(ana.ID);
+
+            // Ya está completa cuando se dispara PartidaFinalizada (ahí se abre FormResultado).
+            Assert.IsNotNull(alFinalizar.FechaFin);
+            Assert.IsTrue(alFinalizar.FechaFin.Value >= alFinalizar.FechaInicio);
+        }
+
+        [TestMethod]
+        public void Fechas_SiLaBaseFallaAlFinalizar_NoHayFechaFin()
+        {
+            IrAlCombate();
+            mapper.ResultadoFinalizar = false;
+            Assert.ThrowsException<Exception>(() => partida.Abandonar(ana.ID));
+            Assert.IsNull(partida.Partida.FechaFin);
+        }
+
+        [TestMethod]
         public void Abandonar_DuranteLaColocacion_EstaPermitido()
         {
             partida.Iniciar(ana, beto);

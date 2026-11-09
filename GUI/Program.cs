@@ -1,6 +1,4 @@
 using System;
-using System.IO;
-using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using BE;
 
@@ -8,26 +6,12 @@ namespace GUI
 {
     static class Program
     {
-        [DllImport("gdi32.dll", CharSet = CharSet.Unicode)]
-        private static extern int AddFontResourceEx(string archivo, uint fl, IntPtr pdv);
-
-        private const uint FR_PRIVATE = 0x10;
-
-        // Carga Montserrat solo para este proceso (sin instalarla en Windows), así los
-        // controles la encuentran por nombre. Si falla, WinForms usa la fuente por defecto.
+        // Carga Montserrat solo para este proceso (sin instalarla en Windows). Los forms
+        // la usan con Fuentes.Montserrat(...): ver Fuentes.cs para por qué no alcanza con
+        // new Font("Montserrat", ...). Si falla, se usa Segoe UI.
         private static void CargarFuentes()
         {
-            string carpeta = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Recursos");
-            foreach (string archivo in new[] { "Montserrat-Regular.ttf", "Montserrat-Bold.ttf" })
-            {
-                try
-                {
-                    AddFontResourceEx(Path.Combine(carpeta, archivo), FR_PRIVATE, IntPtr.Zero);
-                }
-                catch (Exception)
-                {
-                }
-            }
+            Fuentes.Cargar();
         }
 
         [STAThread]

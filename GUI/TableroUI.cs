@@ -20,7 +20,7 @@ namespace GUI
                 Label lbl = new Label();
                 lbl.Text = ((char)('A' + c)).ToString();
                 lbl.TextAlign = ContentAlignment.MiddleCenter;
-                lbl.Font = new Font("Montserrat", 7.5F, FontStyle.Bold);
+                lbl.Font = Fuentes.Montserrat(7.5F, FontStyle.Bold);
                 lbl.ForeColor = Branding.TextoPrincipal;
                 lbl.Size = new Size(tamCelda, grosorRegla);
                 lbl.Location = new Point(origenTablero.X + c * tamCelda, origenTablero.Y - grosorRegla - 2);
@@ -32,7 +32,7 @@ namespace GUI
                 Label lbl = new Label();
                 lbl.Text = (f + 1).ToString();
                 lbl.TextAlign = ContentAlignment.MiddleCenter;
-                lbl.Font = new Font("Montserrat", 7.5F, FontStyle.Bold);
+                lbl.Font = Fuentes.Montserrat(7.5F, FontStyle.Bold);
                 lbl.ForeColor = Branding.TextoPrincipal;
                 lbl.Size = new Size(grosorRegla, tamCelda);
                 lbl.Location = new Point(origenTablero.X - grosorRegla - 2, origenTablero.Y + f * tamCelda);
@@ -62,7 +62,7 @@ namespace GUI
                 lbl.AutoSize = true;
                 lbl.Text = item.Item2;
                 lbl.ForeColor = Branding.TextoPrincipal;
-                lbl.Font = new Font("Montserrat", 8F);
+                lbl.Font = Fuentes.Montserrat(8F);
                 lbl.Location = new Point(x + 22, origen.Y + 1);
                 contenedor.Controls.Add(lbl);
 

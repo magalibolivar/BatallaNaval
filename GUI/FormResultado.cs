@@ -27,7 +27,14 @@ namespace GUI
             lblJugador1Valor.Text = jugador1.Nombre;
             lblJugador2Valor.Text = jugador2.Nombre;
 
-            TimeSpan duracion = partida.FechaFin.Value - partida.FechaInicio;
+            // BLL.PARTIDA completa FechaFin al finalizar; si alguna vez llegara sin ella, se
+            // muestra igual el resultado (con la hora actual) en vez de fallar.
+            DateTime fin = partida.FechaFin.HasValue ? partida.FechaFin.Value : DateTime.Now;
+            TimeSpan duracion = fin - partida.FechaInicio;
+            if (duracion < TimeSpan.Zero)
+            {
+                duracion = TimeSpan.Zero;
+            }
             lblDuracionValor.Text = (int)duracion.TotalHours > 0
                 ? (int)duracion.TotalHours + "h " + duracion.Minutes + "m"
                 : duracion.Minutes + "m " + duracion.Seconds + "s";

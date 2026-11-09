@@ -71,17 +71,17 @@ namespace GUI
 
             this.lblTurno.AutoSize = true;
             this.lblTurno.ForeColor = System.Drawing.Color.White;
-            this.lblTurno.Font = new System.Drawing.Font("Montserrat", 12F, System.Drawing.FontStyle.Bold);
+            this.lblTurno.Font = Fuentes.Montserrat(12F, System.Drawing.FontStyle.Bold);
             this.lblTurno.Location = new System.Drawing.Point(14, 4);
 
             this.lblIndicacion.AutoSize = true;
             this.lblIndicacion.ForeColor = System.Drawing.Color.White;
-            this.lblIndicacion.Font = new System.Drawing.Font("Montserrat", 9F);
+            this.lblIndicacion.Font = Fuentes.Montserrat(9F);
             this.lblIndicacion.Location = new System.Drawing.Point(15, 28);
 
             this.lblApuntando.AutoSize = false;
             this.lblApuntando.ForeColor = System.Drawing.Color.White;
-            this.lblApuntando.Font = new System.Drawing.Font("Montserrat", 11F, System.Drawing.FontStyle.Bold);
+            this.lblApuntando.Font = Fuentes.Montserrat(11F, System.Drawing.FontStyle.Bold);
             this.lblApuntando.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.lblApuntando.Location = new System.Drawing.Point(700, 13);
             this.lblApuntando.Size = new System.Drawing.Size(266, 24);
@@ -93,7 +93,7 @@ namespace GUI
             // ---------- Mi flota (izquierda) ----------
             this.lblHeaderPropio.AutoSize = true;
             this.lblHeaderPropio.ForeColor = Branding.TextoPrincipal;
-            this.lblHeaderPropio.Font = new System.Drawing.Font("Montserrat", 10F, System.Drawing.FontStyle.Bold);
+            this.lblHeaderPropio.Font = Fuentes.Montserrat(10F, System.Drawing.FontStyle.Bold);
             this.lblHeaderPropio.Location = new System.Drawing.Point(OrigenTableroPropio.X - 4, 62);
 
             this.pnlTableroPropio.Location = OrigenTableroPropio;
@@ -103,13 +103,13 @@ namespace GUI
 
             this.lblEstadoPropio.AutoSize = true;
             this.lblEstadoPropio.ForeColor = Branding.TextoPrincipal;
-            this.lblEstadoPropio.Font = new System.Drawing.Font("Montserrat", 8.5F);
+            this.lblEstadoPropio.Font = Fuentes.Montserrat(8.5F);
             this.lblEstadoPropio.Location = new System.Drawing.Point(OrigenTableroPropio.X, OrigenTableroPropio.Y + LADO_TABLERO + 6);
 
             // ---------- Radar enemigo (derecha) ----------
             this.lblHeaderEnemigo.AutoSize = true;
             this.lblHeaderEnemigo.ForeColor = Branding.TextoPrincipal;
-            this.lblHeaderEnemigo.Font = new System.Drawing.Font("Montserrat", 10F, System.Drawing.FontStyle.Bold);
+            this.lblHeaderEnemigo.Font = Fuentes.Montserrat(10F, System.Drawing.FontStyle.Bold);
             this.lblHeaderEnemigo.Location = new System.Drawing.Point(OrigenTableroEnemigo.X - 4, 62);
 
             this.pnlTableroEnemigo.Location = OrigenTableroEnemigo;
@@ -119,20 +119,20 @@ namespace GUI
 
             this.lblEstadoEnemigo.AutoSize = true;
             this.lblEstadoEnemigo.ForeColor = Branding.TextoPrincipal;
-            this.lblEstadoEnemigo.Font = new System.Drawing.Font("Montserrat", 8.5F);
+            this.lblEstadoEnemigo.Font = Fuentes.Montserrat(8.5F);
             this.lblEstadoEnemigo.Location = new System.Drawing.Point(OrigenTableroEnemigo.X, OrigenTableroEnemigo.Y + LADO_TABLERO + 6);
 
             // ---------- Columna central ----------
             this.lblResultado.AutoSize = false;
             this.lblResultado.ForeColor = Branding.TextoPrincipal;
-            this.lblResultado.Font = new System.Drawing.Font("Montserrat", 16F, System.Drawing.FontStyle.Bold);
+            this.lblResultado.Font = Fuentes.Montserrat(16F, System.Drawing.FontStyle.Bold);
             this.lblResultado.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.lblResultado.Location = new System.Drawing.Point(X_CENTRO, 60);
             this.lblResultado.Size = new System.Drawing.Size(ANCHO_CENTRO, 34);
 
             this.lblDetalleResultado.AutoSize = false;
             this.lblDetalleResultado.ForeColor = Branding.TextoPrincipal;
-            this.lblDetalleResultado.Font = new System.Drawing.Font("Montserrat", 9F);
+            this.lblDetalleResultado.Font = Fuentes.Montserrat(9F);
             this.lblDetalleResultado.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.lblDetalleResultado.Location = new System.Drawing.Point(X_CENTRO, 96);
             this.lblDetalleResultado.Size = new System.Drawing.Size(ANCHO_CENTRO, 40);
@@ -143,13 +143,15 @@ namespace GUI
             this.btnPasarTurno.FlatAppearance.BorderSize = 0;
             this.btnPasarTurno.BackColor = Branding.Primario;
             this.btnPasarTurno.ForeColor = System.Drawing.Color.White;
-            this.btnPasarTurno.Font = new System.Drawing.Font("Montserrat", 10F, System.Drawing.FontStyle.Bold);
+            this.btnPasarTurno.Font = Fuentes.Montserrat(10F, System.Drawing.FontStyle.Bold);
             this.btnPasarTurno.Visible = false;
             this.btnPasarTurno.Click += new System.EventHandler(this.btnPasarTurno_Click);
 
-            this.lblFlotaRival.AutoSize = true;
+            this.lblFlotaRival.AutoSize = false;
+            this.lblFlotaRival.AutoEllipsis = true;
+            this.lblFlotaRival.Size = new System.Drawing.Size(ANCHO_CENTRO, 20);
             this.lblFlotaRival.ForeColor = Branding.TextoPrincipal;
-            this.lblFlotaRival.Font = new System.Drawing.Font("Montserrat", 9.5F, System.Drawing.FontStyle.Bold);
+            this.lblFlotaRival.Font = Fuentes.Montserrat(9.5F, System.Drawing.FontStyle.Bold);
             this.lblFlotaRival.Location = new System.Drawing.Point(X_CENTRO, 188);
 
             this.pnlFlotaRival.Location = new System.Drawing.Point(X_CENTRO, 210);
@@ -159,18 +161,20 @@ namespace GUI
 
             this.lblRegistro.AutoSize = true;
             this.lblRegistro.ForeColor = Branding.TextoPrincipal;
-            this.lblRegistro.Font = new System.Drawing.Font("Montserrat", 9.5F, System.Drawing.FontStyle.Bold);
+            this.lblRegistro.Font = Fuentes.Montserrat(9.5F, System.Drawing.FontStyle.Bold);
             this.lblRegistro.Location = new System.Drawing.Point(X_CENTRO, 350);
             this.lblRegistro.Text = "Registro de disparos";
 
             this.lstRegistro.Location = new System.Drawing.Point(X_CENTRO, 372);
             this.lstRegistro.Size = new System.Drawing.Size(ANCHO_CENTRO, 94);
             this.lstRegistro.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.lstRegistro.Font = new System.Drawing.Font("Montserrat", 8.5F);
+            this.lstRegistro.Font = Fuentes.Montserrat(8.5F);
             this.lstRegistro.ForeColor = Branding.TextoPrincipal;
             this.lstRegistro.BackColor = Branding.Panel;
             this.lstRegistro.IntegralHeight = false;
             this.lstRegistro.SelectionMode = System.Windows.Forms.SelectionMode.None;
+            // Con nombres largos y "¡Hundido! (Portaaviones)" la línea no entra en el ancho.
+            this.lstRegistro.HorizontalScrollbar = true;
 
             this.Controls.Add(this.pnlBanner);
             this.Controls.Add(this.lblHeaderPropio);

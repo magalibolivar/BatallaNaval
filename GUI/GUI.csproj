@@ -51,6 +51,7 @@
     <Compile Include="Branding.cs" />
     <Compile Include="RecursosNaves.cs" />
     <Compile Include="TableroUI.cs" />
+    <Compile Include="Fuentes.cs" />
     <Compile Include="FormLogin.cs">
       <SubType>Form</SubType>
     </Compile>

@@ -166,7 +166,7 @@ namespace GUI
             insignia.Location = new Point(10, y + 7);
             insignia.Size = new Size(26, 26);
             insignia.TextAlign = ContentAlignment.MiddleCenter;
-            insignia.Font = new Font("Montserrat", 9F, FontStyle.Bold);
+            insignia.Font = Fuentes.Montserrat(9F, FontStyle.Bold);
             insignia.BackColor = ganada ? Branding.Primario : Branding.TableroVacio;
             insignia.ForeColor = ganada ? Color.White : Branding.Secundario;
             insignia.Text = ganada ? "G" : "P";
@@ -175,7 +175,7 @@ namespace GUI
             Label rival = new Label();
             rival.AutoSize = true;
             rival.Location = new Point(44, y + 3);
-            rival.Font = new Font("Montserrat", 9F, FontStyle.Bold);
+            rival.Font = Fuentes.Montserrat(9F, FontStyle.Bold);
             rival.ForeColor = Branding.TextoPrincipal;
             rival.Text = "vs " + fila.Rival;
             pnlHistorial.Controls.Add(rival);
@@ -183,7 +183,7 @@ namespace GUI
             Label detalle = new Label();
             detalle.AutoSize = true;
             detalle.Location = new Point(44, y + 21);
-            detalle.Font = new Font("Montserrat", 8F);
+            detalle.Font = Fuentes.Montserrat(8F);
             detalle.ForeColor = Branding.Secundario;
             detalle.Text = fila.Resultado + " · " + fila.Fecha;
             pnlHistorial.Controls.Add(detalle);

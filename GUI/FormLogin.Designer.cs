@@ -65,7 +65,7 @@ namespace GUI
             this.SuspendLayout();
 
             this.BackColor = Branding.FondoVentana;
-            this.Font = new System.Drawing.Font("Montserrat", 9F);
+            this.Font = Fuentes.Montserrat(9F);
 
             // ---------- Logo y título ----------
             this.picLogo.Location = new System.Drawing.Point(140, 18);
@@ -74,7 +74,7 @@ namespace GUI
             this.picLogo.Image = RecursosNaves.LogoBatallaNaval();
 
             this.lblTituloBatalla.AutoSize = false;
-            this.lblTituloBatalla.Font = new System.Drawing.Font("Montserrat", 15F, System.Drawing.FontStyle.Bold);
+            this.lblTituloBatalla.Font = Fuentes.Montserrat(15F, System.Drawing.FontStyle.Bold);
             this.lblTituloBatalla.ForeColor = Branding.TextoPrincipal;
             this.lblTituloBatalla.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.lblTituloBatalla.Location = new System.Drawing.Point(0, 98);
@@ -82,7 +82,7 @@ namespace GUI
             this.lblTituloBatalla.Text = "BATALLA";
 
             this.lblTituloNaval.AutoSize = false;
-            this.lblTituloNaval.Font = new System.Drawing.Font("Montserrat", 19F, System.Drawing.FontStyle.Bold);
+            this.lblTituloNaval.Font = Fuentes.Montserrat(19F, System.Drawing.FontStyle.Bold);
             this.lblTituloNaval.ForeColor = Branding.Primario;
             this.lblTituloNaval.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.lblTituloNaval.Location = new System.Drawing.Point(0, 124);
@@ -115,7 +115,7 @@ namespace GUI
             this.lnkMostrar.LinkColor = Branding.Secundario;
             this.lnkMostrar.ActiveLinkColor = Branding.Primario;
             this.lnkMostrar.LinkBehavior = System.Windows.Forms.LinkBehavior.HoverUnderline;
-            this.lnkMostrar.Font = new System.Drawing.Font("Montserrat", 8F, System.Drawing.FontStyle.Bold);
+            this.lnkMostrar.Font = Fuentes.Montserrat(8F, System.Drawing.FontStyle.Bold);
             this.lnkMostrar.Text = "Mostrar";
             this.lnkMostrar.TabStop = false;
             this.lnkMostrar.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.lnkMostrar_LinkClicked);
@@ -123,14 +123,14 @@ namespace GUI
 
             this.chkRecordar.AutoSize = true;
             this.chkRecordar.ForeColor = Branding.TextoPrincipal;
-            this.chkRecordar.Font = new System.Drawing.Font("Montserrat", 8.5F);
+            this.chkRecordar.Font = Fuentes.Montserrat(8.5F);
             this.chkRecordar.Location = new System.Drawing.Point(X_CAMPOS, 292);
             this.chkRecordar.Text = "Recordar usuario";
             this.toolTip.SetToolTip(this.chkRecordar, "Guarda solo el nombre de usuario en esta PC (nunca la contraseña).");
 
             this.lblMayusculas.AutoSize = false;
             this.lblMayusculas.ForeColor = Branding.TableroHundido;
-            this.lblMayusculas.Font = new System.Drawing.Font("Montserrat", 8F, System.Drawing.FontStyle.Bold);
+            this.lblMayusculas.Font = Fuentes.Montserrat(8F, System.Drawing.FontStyle.Bold);
             this.lblMayusculas.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.lblMayusculas.Location = new System.Drawing.Point(X_CAMPOS + 150, 292);
             this.lblMayusculas.Size = new System.Drawing.Size(150, 20);
@@ -150,7 +150,7 @@ namespace GUI
             this.btnIngresar.FlatAppearance.BorderSize = 0;
             this.btnIngresar.BackColor = Branding.Primario;
             this.btnIngresar.ForeColor = System.Drawing.Color.White;
-            this.btnIngresar.Font = new System.Drawing.Font("Montserrat", 11F, System.Drawing.FontStyle.Bold);
+            this.btnIngresar.Font = Fuentes.Montserrat(11F, System.Drawing.FontStyle.Bold);
             this.btnIngresar.Click += new System.EventHandler(this.btnIngresar_Click);
 
             // ---------- Invitado y registro ----------
@@ -165,13 +165,13 @@ namespace GUI
             this.btnInvitado.FlatAppearance.BorderColor = Branding.Secundario;
             this.btnInvitado.BackColor = Branding.Panel;
             this.btnInvitado.ForeColor = Branding.Secundario;
-            this.btnInvitado.Font = new System.Drawing.Font("Montserrat", 10F, System.Drawing.FontStyle.Bold);
+            this.btnInvitado.Font = Fuentes.Montserrat(10F, System.Drawing.FontStyle.Bold);
             this.btnInvitado.Text = "Jugar como invitado";
             this.btnInvitado.Click += new System.EventHandler(this.btnInvitado_Click);
 
             this.lblAyudaInvitado.AutoSize = false;
             this.lblAyudaInvitado.ForeColor = Branding.Secundario;
-            this.lblAyudaInvitado.Font = new System.Drawing.Font("Montserrat", 8F);
+            this.lblAyudaInvitado.Font = Fuentes.Montserrat(8F);
             this.lblAyudaInvitado.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.lblAyudaInvitado.Location = new System.Drawing.Point(X_CAMPOS - 10, 472);
             this.lblAyudaInvitado.Size = new System.Drawing.Size(ANCHO_CAMPOS + 20, 34);
@@ -183,7 +183,7 @@ namespace GUI
             this.lnkRegistrarme.ForeColor = Branding.TextoPrincipal;
             this.lnkRegistrarme.LinkColor = Branding.Primario;
             this.lnkRegistrarme.ActiveLinkColor = Branding.TextoPrincipal;
-            this.lnkRegistrarme.Font = new System.Drawing.Font("Montserrat", 9F, System.Drawing.FontStyle.Bold);
+            this.lnkRegistrarme.Font = Fuentes.Montserrat(9F, System.Drawing.FontStyle.Bold);
             this.lnkRegistrarme.Text = "¿No tenés cuenta? Creá una";
             this.lnkRegistrarme.LinkArea = new System.Windows.Forms.LinkArea(18, 8);
             this.lnkRegistrarme.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.lnkRegistrarme_LinkClicked);
@@ -233,7 +233,7 @@ namespace GUI
             texto.BorderStyle = System.Windows.Forms.BorderStyle.None;
             texto.BackColor = Branding.Panel;
             texto.ForeColor = Branding.TextoPrincipal;
-            texto.Font = new System.Drawing.Font("Montserrat", 10.5F);
+            texto.Font = Fuentes.Montserrat(10.5F);
             texto.Location = new System.Drawing.Point(14, 11);
             texto.Size = new System.Drawing.Size(anchoTexto, 20);
             texto.Enter += new System.EventHandler(this.Campo_FocoCambiado);

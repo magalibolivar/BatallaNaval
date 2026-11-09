@@ -30,7 +30,7 @@ namespace GUI
             this.BackColor = Branding.FondoVentana;
 
             this.lblTitulo.AutoSize = true;
-            this.lblTitulo.Font = new System.Drawing.Font("Montserrat", 12F, System.Drawing.FontStyle.Bold);
+            this.lblTitulo.Font = Fuentes.Montserrat(12F, System.Drawing.FontStyle.Bold);
             this.lblTitulo.ForeColor = Branding.Primario;
             this.lblTitulo.Location = new System.Drawing.Point(20, 15);
 

@@ -31,7 +31,7 @@ namespace GUI
             this.BackColor = Branding.FondoVentana;
 
             this.lblTitulo.AutoSize = true;
-            this.lblTitulo.Font = new System.Drawing.Font("Montserrat", 13F, System.Drawing.FontStyle.Bold);
+            this.lblTitulo.Font = Fuentes.Montserrat(13F, System.Drawing.FontStyle.Bold);
             this.lblTitulo.ForeColor = Branding.TableroHundido;
             this.lblTitulo.Location = new System.Drawing.Point(25, 20);
             this.lblTitulo.Text = "¿Quién abandona la partida?";

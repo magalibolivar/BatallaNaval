@@ -53,25 +53,25 @@ namespace GUI
             this.lblMedalla.Font = new System.Drawing.Font("Segoe UI Emoji", 22F);
             this.lblMedalla.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.lblMedalla.Size = new System.Drawing.Size(64, 64);
-            this.lblMedalla.Location = new System.Drawing.Point(108, 24);
+            this.lblMedalla.Location = new System.Drawing.Point(138, 24);
             this.lblMedalla.BackColor = System.Drawing.Color.FromArgb(253, 240, 245);
 
             this.lblTitulo.AutoSize = false;
             this.lblTitulo.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.lblTitulo.Font = new System.Drawing.Font("Montserrat", 15F, System.Drawing.FontStyle.Bold);
+            this.lblTitulo.Font = Fuentes.Montserrat(15F, System.Drawing.FontStyle.Bold);
             this.lblTitulo.ForeColor = Branding.Primario;
             this.lblTitulo.Location = new System.Drawing.Point(20, 96);
-            this.lblTitulo.Size = new System.Drawing.Size(240, 30);
+            this.lblTitulo.Size = new System.Drawing.Size(300, 30);
 
             this.lblDetalle.AutoSize = false;
             this.lblDetalle.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.lblDetalle.ForeColor = Branding.TextoPrincipal;
             this.lblDetalle.Location = new System.Drawing.Point(20, 128);
-            this.lblDetalle.Size = new System.Drawing.Size(240, 36);
+            this.lblDetalle.Size = new System.Drawing.Size(300, 36);
 
             this.pnlResumen.BackColor = System.Drawing.Color.FromArgb(248, 242, 250);
             this.pnlResumen.Location = new System.Drawing.Point(30, 172);
-            this.pnlResumen.Size = new System.Drawing.Size(220, 112);
+            this.pnlResumen.Size = new System.Drawing.Size(280, 112);
             this.pnlResumen.Padding = new System.Windows.Forms.Padding(14, 10, 14, 10);
 
             this.lblJugador1Clave.AutoSize = true;
@@ -80,8 +80,8 @@ namespace GUI
             this.lblJugador1Clave.Text = "Jugador 1";
             this.lblJugador1Valor.AutoSize = true;
             this.lblJugador1Valor.ForeColor = Branding.TextoPrincipal;
-            this.lblJugador1Valor.Font = new System.Drawing.Font("Montserrat", 9F, System.Drawing.FontStyle.Bold);
-            this.lblJugador1Valor.Location = new System.Drawing.Point(140, 10);
+            this.lblJugador1Valor.Font = Fuentes.Montserrat(9F, System.Drawing.FontStyle.Bold);
+            this.lblJugador1Valor.Location = new System.Drawing.Point(110, 10);
 
             this.lblJugador2Clave.AutoSize = true;
             this.lblJugador2Clave.ForeColor = System.Drawing.Color.Gray;
@@ -89,8 +89,8 @@ namespace GUI
             this.lblJugador2Clave.Text = "Jugador 2";
             this.lblJugador2Valor.AutoSize = true;
             this.lblJugador2Valor.ForeColor = Branding.TextoPrincipal;
-            this.lblJugador2Valor.Font = new System.Drawing.Font("Montserrat", 9F, System.Drawing.FontStyle.Bold);
-            this.lblJugador2Valor.Location = new System.Drawing.Point(140, 35);
+            this.lblJugador2Valor.Font = Fuentes.Montserrat(9F, System.Drawing.FontStyle.Bold);
+            this.lblJugador2Valor.Location = new System.Drawing.Point(110, 35);
 
             this.lblDuracionClave.AutoSize = true;
             this.lblDuracionClave.ForeColor = System.Drawing.Color.Gray;
@@ -98,8 +98,8 @@ namespace GUI
             this.lblDuracionClave.Text = "Duración";
             this.lblDuracionValor.AutoSize = true;
             this.lblDuracionValor.ForeColor = Branding.TextoPrincipal;
-            this.lblDuracionValor.Font = new System.Drawing.Font("Montserrat", 9F, System.Drawing.FontStyle.Bold);
-            this.lblDuracionValor.Location = new System.Drawing.Point(140, 60);
+            this.lblDuracionValor.Font = Fuentes.Montserrat(9F, System.Drawing.FontStyle.Bold);
+            this.lblDuracionValor.Location = new System.Drawing.Point(110, 60);
 
             this.lblResultadoClave.AutoSize = true;
             this.lblResultadoClave.ForeColor = System.Drawing.Color.Gray;
@@ -107,8 +107,8 @@ namespace GUI
             this.lblResultadoClave.Text = "Resultado";
             this.lblResultadoValor.AutoSize = true;
             this.lblResultadoValor.ForeColor = Branding.TextoPrincipal;
-            this.lblResultadoValor.Font = new System.Drawing.Font("Montserrat", 9F, System.Drawing.FontStyle.Bold);
-            this.lblResultadoValor.Location = new System.Drawing.Point(140, 85);
+            this.lblResultadoValor.Font = Fuentes.Montserrat(9F, System.Drawing.FontStyle.Bold);
+            this.lblResultadoValor.Location = new System.Drawing.Point(110, 85);
 
             this.pnlResumen.Controls.Add(this.lblJugador1Clave);
             this.pnlResumen.Controls.Add(this.lblJugador1Valor);
@@ -120,17 +120,17 @@ namespace GUI
             this.pnlResumen.Controls.Add(this.lblResultadoValor);
 
             this.btnVerMovimientos.Location = new System.Drawing.Point(30, 298);
-            this.btnVerMovimientos.Size = new System.Drawing.Size(220, 36);
+            this.btnVerMovimientos.Size = new System.Drawing.Size(280, 36);
             this.btnVerMovimientos.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnVerMovimientos.FlatAppearance.BorderSize = 0;
             this.btnVerMovimientos.BackColor = Branding.Primario;
             this.btnVerMovimientos.ForeColor = System.Drawing.Color.White;
-            this.btnVerMovimientos.Font = new System.Drawing.Font("Montserrat", 9.5F, System.Drawing.FontStyle.Bold);
+            this.btnVerMovimientos.Font = Fuentes.Montserrat(9.5F, System.Drawing.FontStyle.Bold);
             this.btnVerMovimientos.Text = "Ver movimientos de esta partida";
             this.btnVerMovimientos.Click += new System.EventHandler(this.btnVerMovimientos_Click);
 
             this.btnVolver.Location = new System.Drawing.Point(30, 340);
-            this.btnVolver.Size = new System.Drawing.Size(220, 34);
+            this.btnVolver.Size = new System.Drawing.Size(280, 34);
             this.btnVolver.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnVolver.FlatAppearance.BorderColor = Branding.Secundario;
             this.btnVolver.BackColor = Branding.Panel;
@@ -139,7 +139,7 @@ namespace GUI
             this.btnVolver.Click += new System.EventHandler(this.btnVolver_Click);
 
             this.AcceptButton = this.btnVolver;
-            this.ClientSize = new System.Drawing.Size(280, 395);
+            this.ClientSize = new System.Drawing.Size(340, 395);
             this.Controls.Add(this.lblMedalla);
             this.Controls.Add(this.lblTitulo);
             this.Controls.Add(this.lblDetalle);
