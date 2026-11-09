@@ -109,7 +109,18 @@ namespace BLL
             }
 
             string nombre = numeroJugador == 1 ? INVITADO_1 : INVITADO_2;
-            BE.USUARIO invitado = mapper.BuscarPorNombre(nombre);
+            BE.USUARIO invitado;
+            try
+            {
+                invitado = mapper.BuscarPorNombre(nombre);
+            }
+            catch (Exception ex)
+            {
+                // Una base creada antes de agregar los invitados no tiene el SP
+                // USUARIO_BUSCAR_POR_NOMBRE: en vez del error de SQL, se dice cómo arreglarlo.
+                throw new Exception("La base de datos no está actualizada para jugar como invitado. " +
+                    "Ejecutá Script.sql para actualizarla (" + ex.Message + ")");
+            }
             if (invitado == null)
             {
                 throw new Exception("No existe el usuario " + nombre + " en la base de datos. " +

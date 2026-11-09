@@ -65,8 +65,14 @@ namespace Tests.Unitarios
             return Usuarios.TryGetValue(id, out usuario) ? usuario : null;
         }
 
+        public Exception ErrorAlBuscarPorNombre = null;
+
         public override BE.USUARIO BuscarPorNombre(string nombre)
         {
+            if (ErrorAlBuscarPorNombre != null)
+            {
+                throw ErrorAlBuscarPorNombre;
+            }
             foreach (BE.USUARIO usuario in Usuarios.Values)
             {
                 if (usuario.Nombre == nombre)

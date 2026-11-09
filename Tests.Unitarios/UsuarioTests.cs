@@ -122,6 +122,19 @@ namespace Tests.Unitarios
             Assert.AreEqual(0, mapperLog.Registrados.Count);
         }
 
+        [TestMethod]
+        public void IngresarComoInvitado_ConLaBaseDesactualizada_PideCorrerElScript()
+        {
+            // Regresión: en una base sin el SP USUARIO_BUSCAR_POR_NOMBRE llegaba el error crudo de SQL.
+            mapper.ErrorAlBuscarPorNombre = new Exception("No se encontró el procedimiento almacenado 'USUARIO_BUSCAR_POR_NOMBRE'.");
+
+            Exception ex = Assert.ThrowsException<Exception>(() => bll.IngresarComoInvitado(1));
+
+            StringAssert.Contains(ex.Message, "Script.sql");
+            StringAssert.Contains(ex.Message, "USUARIO_BUSCAR_POR_NOMBRE");
+            Assert.AreEqual(0, mapperLog.Registrados.Count);
+        }
+
         [DataTestMethod]
         [DataRow(0)]
         [DataRow(3)]
