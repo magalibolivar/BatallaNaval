@@ -44,7 +44,7 @@ namespace GUI
             this.BackColor = Branding.FondoVentana;
 
             this.lblTitulo.AutoSize = true;
-            this.lblTitulo.Font = new System.Drawing.Font("Segoe UI", 14F, System.Drawing.FontStyle.Bold);
+            this.lblTitulo.Font = new System.Drawing.Font("Montserrat", 14F, System.Drawing.FontStyle.Bold);
             this.lblTitulo.ForeColor = Branding.Primario;
             this.lblTitulo.Location = new System.Drawing.Point(20, 15);
             this.lblTitulo.Text = "Estadísticas";

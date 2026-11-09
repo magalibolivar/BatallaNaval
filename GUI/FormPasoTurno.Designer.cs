@@ -25,7 +25,7 @@ namespace GUI
             this.BackColor = Branding.FondoVentana;
 
             this.lblMensaje.AutoSize = false;
-            this.lblMensaje.Font = new System.Drawing.Font("Segoe UI", 13F);
+            this.lblMensaje.Font = new System.Drawing.Font("Montserrat", 13F);
             this.lblMensaje.ForeColor = Branding.TextoPrincipal;
             this.lblMensaje.Location = new System.Drawing.Point(30, 30);
             this.lblMensaje.Size = new System.Drawing.Size(340, 90);
@@ -37,7 +37,7 @@ namespace GUI
             this.btnContinuar.FlatAppearance.BorderSize = 0;
             this.btnContinuar.BackColor = Branding.Primario;
             this.btnContinuar.ForeColor = System.Drawing.Color.White;
-            this.btnContinuar.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
+            this.btnContinuar.Font = new System.Drawing.Font("Montserrat", 10F, System.Drawing.FontStyle.Bold);
             this.btnContinuar.Text = "Continuar";
             this.btnContinuar.Click += new System.EventHandler(this.btnContinuar_Click);
 

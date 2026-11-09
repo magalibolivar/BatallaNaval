@@ -57,6 +57,79 @@ namespace Tests.Unitarios
             StringAssert.Contains(bll.ValidarRegistro(Usuario(nombre, contraseña)), motivo);
         }
 
+        [DataTestMethod]
+        [DataRow("Invitado1")]
+        [DataRow("invitado2")]
+        [DataRow("INVITADO1")]
+        public void ValidarRegistro_NombreDeInvitado_EstaReservado(string nombre)
+        {
+            StringAssert.Contains(bll.ValidarRegistro(Usuario(nombre, "1234")), "reservado para los invitados");
+        }
+
+        // -------------------- Invitados --------------------
+
+        [DataTestMethod]
+        [DataRow("Invitado1", true)]
+        [DataRow("invitado2", true)]
+        [DataRow(" Invitado2 ", true)]
+        [DataRow("Invitado3", false)]
+        [DataRow("ana", false)]
+        [DataRow(null, false)]
+        public void EsInvitado_ReconoceLosNombresReservados(string nombre, bool esperado)
+        {
+            Assert.AreEqual(esperado, BLL.USUARIO.EsInvitado(nombre));
+            Assert.AreEqual(esperado, BLL.USUARIO.EsInvitado(new BE.USUARIO { Nombre = nombre }));
+        }
+
+        [TestMethod]
+        public void EsInvitado_UsuarioNull_EsFalse()
+        {
+            Assert.IsFalse(BLL.USUARIO.EsInvitado((BE.USUARIO)null));
+        }
+
+        [TestMethod]
+        public void Login_ComoInvitado_SeRechazaSinIrALaBase()
+        {
+            Assert.IsFalse(bll.Login(Usuario("Invitado1", "")));
+            Assert.IsFalse(bll.Login(Usuario("invitado2", "1234")));
+            Assert.AreEqual(0, mapper.LoginsLlamados);
+            Assert.AreEqual(0, mapperLog.Registrados.Count);
+        }
+
+        [DataTestMethod]
+        [DataRow(1, 20, "Invitado1")]
+        [DataRow(2, 21, "Invitado2")]
+        public void IngresarComoInvitado_DevuelveElInvitadoYRegistraElInicio(int numero, int idEsperado, string nombre)
+        {
+            mapper.Usuarios[20] = new BE.USUARIO { ID = 20, Nombre = "Invitado1", Contraseña = "" };
+            mapper.Usuarios[21] = new BE.USUARIO { ID = 21, Nombre = "Invitado2", Contraseña = "" };
+
+            BE.USUARIO invitado = bll.IngresarComoInvitado(numero);
+
+            Assert.AreEqual(idEsperado, invitado.ID);
+            Assert.AreEqual(nombre, invitado.Nombre);
+            Assert.AreEqual(1, mapperLog.Registrados.Count);
+            Assert.AreEqual(idEsperado, mapperLog.Registrados[0].IdUsuario);
+            Assert.AreEqual(BE.LOG.INICIO_SESION, mapperLog.Registrados[0].IdTipo);
+            StringAssert.Contains(mapperLog.Registrados[0].Descripcion, "(invitado)");
+        }
+
+        [TestMethod]
+        public void IngresarComoInvitado_SinLosInvitadosEnLaBase_PideCorrerElScript()
+        {
+            Exception ex = Assert.ThrowsException<Exception>(() => bll.IngresarComoInvitado(1));
+            StringAssert.Contains(ex.Message, "Script.sql");
+            Assert.AreEqual(0, mapperLog.Registrados.Count);
+        }
+
+        [DataTestMethod]
+        [DataRow(0)]
+        [DataRow(3)]
+        public void IngresarComoInvitado_NumeroInvalido_Falla(int numero)
+        {
+            Assert.ThrowsException<Exception>(() => bll.IngresarComoInvitado(numero));
+        }
+
         // -------------------- Insertar --------------------
 
         [TestMethod]

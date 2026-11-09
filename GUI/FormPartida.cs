@@ -68,10 +68,28 @@ namespace GUI
                     paso.ShowDialog(this);
                 }
 
+                // El combate muestra 2 tableros + la columna central: necesita una ventana más ancha.
+                AjustarTamaño(new System.Drawing.Size(1010, 580));
+
                 ucCombate uc = new ucCombate(partidaBLL);
                 uc.Dock = DockStyle.Fill;
                 CambiarControl(uc);
             }
+        }
+
+        // Cambia el tamaño manteniendo la ventana centrada donde estaba y dentro de la pantalla.
+        private void AjustarTamaño(System.Drawing.Size cliente)
+        {
+            System.Drawing.Point centro = new System.Drawing.Point(
+                this.Left + this.Width / 2, this.Top + this.Height / 2);
+            this.ClientSize = cliente;
+
+            System.Drawing.Rectangle area = Screen.FromControl(this).WorkingArea;
+            int x = centro.X - this.Width / 2;
+            int y = centro.Y - this.Height / 2;
+            x = Math.Max(area.Left, Math.Min(x, area.Right - this.Width));
+            y = Math.Max(area.Top, Math.Min(y, area.Bottom - this.Height));
+            this.Location = new System.Drawing.Point(x, y);
         }
 
         private void CambiarControl(Control nuevo)
@@ -82,6 +100,14 @@ namespace GUI
 
         private void PartidaBLL_PartidaFinalizada(BE.PARTIDA partida, bool abandonada)
         {
+            // Detrás del resultado queda el tablero final, con las flotas reveladas.
+            ucCombate combate = pnlContenido.Controls.Count > 0 ? pnlContenido.Controls[0] as ucCombate : null;
+            if (combate != null)
+            {
+                combate.MostrarFinal(abandonada);
+                combate.Update();
+            }
+
             using (FormResultado formResultado = new FormResultado(partida, jugador1, jugador2, abandonada))
             {
                 formResultado.ShowDialog(this);

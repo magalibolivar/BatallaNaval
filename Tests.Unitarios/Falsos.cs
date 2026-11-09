@@ -47,8 +47,11 @@ namespace Tests.Unitarios
             return IdAlInsertar;
         }
 
+        public int LoginsLlamados = 0;
+
         public override bool Login(BE.USUARIO usuario)
         {
+            LoginsLlamados++;
             if (ResultadoLogin)
             {
                 usuario.ID = IdAlLoguear;
@@ -60,6 +63,18 @@ namespace Tests.Unitarios
         {
             BE.USUARIO usuario;
             return Usuarios.TryGetValue(id, out usuario) ? usuario : null;
+        }
+
+        public override BE.USUARIO BuscarPorNombre(string nombre)
+        {
+            foreach (BE.USUARIO usuario in Usuarios.Values)
+            {
+                if (usuario.Nombre == nombre)
+                {
+                    return usuario;
+                }
+            }
+            return null;
         }
     }
 

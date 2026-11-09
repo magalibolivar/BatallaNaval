@@ -29,7 +29,7 @@ namespace GUI
             this.txtReglas.ReadOnly = true;
             this.txtReglas.BackColor = Branding.Panel;
             this.txtReglas.ForeColor = Branding.TextoPrincipal;
-            this.txtReglas.Font = new System.Drawing.Font("Segoe UI", 10F);
+            this.txtReglas.Font = new System.Drawing.Font("Montserrat", 10F);
 
             this.btnCerrar.Location = new System.Drawing.Point(430, 430);
             this.btnCerrar.Size = new System.Drawing.Size(110, 32);

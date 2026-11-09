@@ -404,6 +404,154 @@ namespace Tests.Unitarios
             Assert.IsFalse(partida.ObtenerOcupacionPropia(ana.ID)[0, 0]);
         }
 
+        // -------------------- Quitar / reiniciar / al azar --------------------
+
+        [TestMethod]
+        public void QuitarNave_LaVuelveAPendienteYLiberaSusCeldas()
+        {
+            partida.Iniciar(ana, beto);
+            partida.ColocarNave(ana.ID, BE.TIPONAVE.Flota[1], 2, 3, BE.ORIENTACION.Horizontal);
+            partida.ColocarNave(ana.ID, BE.TIPONAVE.Flota[3], 8, 8, BE.ORIENTACION.Vertical);
+
+            partida.QuitarNave(ana.ID, BE.TIPONAVE.Flota[1]);
+
+            Assert.AreEqual(1, partida.NavesDe(ana.ID).Count);
+            Assert.IsTrue(partida.FlotaPendiente(ana.ID).Any(t => t.Id == BE.TIPONAVE.Flota[1].Id));
+            Assert.IsFalse(partida.ObtenerOcupacionPropia(ana.ID)[2, 3]);
+            Assert.IsTrue(partida.ObtenerOcupacionPropia(ana.ID)[8, 8]);
+            // Se puede volver a colocar donde estaba.
+            partida.ColocarNave(ana.ID, BE.TIPONAVE.Flota[1], 2, 3, BE.ORIENTACION.Horizontal);
+        }
+
+        [TestMethod]
+        public void QuitarNave_NoColocada_Falla()
+        {
+            partida.Iniciar(ana, beto);
+            Exception ex = Assert.ThrowsException<Exception>(() => partida.QuitarNave(ana.ID, BE.TIPONAVE.Flota[0]));
+            StringAssert.Contains(ex.Message, "todavía no está colocada");
+        }
+
+        [TestMethod]
+        public void QuitarNave_DespuesDeConfirmar_Falla()
+        {
+            partida.Iniciar(ana, beto);
+            ColocarFlota(ana.ID);
+            Assert.ThrowsException<Exception>(() => partida.QuitarNave(ana.ID, BE.TIPONAVE.Flota[0]));
+            Assert.AreEqual(5, partida.NavesDe(ana.ID).Count);
+        }
+
+        [TestMethod]
+        public void ReiniciarColocacion_SacaTodasLasNaves()
+        {
+            partida.Iniciar(ana, beto);
+            partida.ColocarNave(ana.ID, BE.TIPONAVE.Flota[0], 0, 0, BE.ORIENTACION.Horizontal);
+            partida.ColocarNave(ana.ID, BE.TIPONAVE.Flota[4], 5, 5, BE.ORIENTACION.Horizontal);
+
+            partida.ReiniciarColocacion(ana.ID);
+
+            Assert.AreEqual(0, partida.NavesDe(ana.ID).Count);
+            Assert.AreEqual(5, partida.FlotaPendiente(ana.ID).Count);
+            Assert.IsFalse(partida.ObtenerOcupacionPropia(ana.ID)[0, 0]);
+            Assert.IsFalse(partida.FlotaCompleta(ana.ID));
+        }
+
+        [TestMethod]
+        public void ReiniciarColocacion_FueraDeTurno_Falla()
+        {
+            partida.Iniciar(ana, beto);
+            Assert.ThrowsException<Exception>(() => partida.ReiniciarColocacion(beto.ID));
+        }
+
+        [TestMethod]
+        public void ColocarAlAzar_CompletaLaFlotaSinSuperposiciones()
+        {
+            partida.Iniciar(ana, beto);
+            for (int semilla = 0; semilla < 30; semilla++)
+            {
+                partida.ReiniciarColocacion(ana.ID);
+                partida.ColocarAlAzar(ana.ID, new Random(semilla));
+
+                Assert.IsTrue(partida.FlotaCompleta(ana.ID));
+                int celdasOcupadas = 0;
+                foreach (bool ocupada in partida.ObtenerOcupacionPropia(ana.ID))
+                {
+                    if (ocupada) celdasOcupadas++;
+                }
+                // 5 + 4 + 3 + 2 + 1: si hubiera superposición, habría menos celdas ocupadas.
+                Assert.AreEqual(15, celdasOcupadas);
+            }
+        }
+
+        [TestMethod]
+        public void ColocarAlAzar_RespetaLasNavesYaColocadasYNoConfirma()
+        {
+            partida.Iniciar(ana, beto);
+            partida.ColocarNave(ana.ID, BE.TIPONAVE.Flota[0], 7, 2, BE.ORIENTACION.Vertical);
+
+            partida.ColocarAlAzar(ana.ID);
+
+            Assert.IsTrue(partida.FlotaCompleta(ana.ID));
+            BE.NAVECOLOCADA batalla = partida.NavesDe(ana.ID).Single(n => n.Tipo.Id == BE.TIPONAVE.Flota[0].Id);
+            Assert.AreEqual(7, batalla.Fila);
+            Assert.AreEqual(2, batalla.Columna);
+            Assert.AreEqual(BE.ORIENTACION.Vertical, batalla.Orientacion);
+            Assert.IsTrue(partida.PuedeColocar(ana.ID));
+            Assert.AreEqual(BLL.FASE_PARTIDA.ColocandoJugador1, partida.Fase);
+        }
+
+        [TestMethod]
+        public void ColocarAlAzar_ConLaFlotaCompleta_NoCambiaNada()
+        {
+            // La GUI, para "redistribuir", primero reinicia y después coloca al azar:
+            // ColocarAlAzar solo completa lo pendiente.
+            partida.Iniciar(ana, beto);
+            ColocarFlotaSinConfirmar(ana.ID);
+            List<string> antes = partida.NavesDe(ana.ID).Select(n => n.Tipo.Id + ":" + n.Fila + "," + n.Columna).ToList();
+
+            partida.ColocarAlAzar(ana.ID, new Random(1));
+
+            CollectionAssert.AreEqual(antes, partida.NavesDe(ana.ID).Select(n => n.Tipo.Id + ":" + n.Fila + "," + n.Columna).ToList());
+        }
+
+        [TestMethod]
+        public void PosicionValida_NoLanzaExcepcionesInternas()
+        {
+            // Regresión: antes validaba lanzando y atrapando una excepción por cada posición
+            // inválida (cientos por cada "Al azar"), que aparecían en el depurador.
+            partida.Iniciar(ana, beto);
+            ColocarFlotaSinConfirmar(ana.ID);
+            int excepciones = 0;
+            EventHandler<System.Runtime.ExceptionServices.FirstChanceExceptionEventArgs> contar = (o, e) => excepciones++;
+            AppDomain.CurrentDomain.FirstChanceException += contar;
+            try
+            {
+                Assert.IsFalse(partida.PosicionValida(ana.ID, BE.TIPONAVE.Flota[0], 0, 0, BE.ORIENTACION.Vertical));
+                Assert.IsFalse(partida.PosicionValida(ana.ID, BE.TIPONAVE.Flota[0], 14, 14, BE.ORIENTACION.Horizontal));
+                partida.ReiniciarColocacion(ana.ID);
+                partida.ColocarAlAzar(ana.ID, new Random(3));
+            }
+            finally
+            {
+                AppDomain.CurrentDomain.FirstChanceException -= contar;
+            }
+            Assert.AreEqual(0, excepciones);
+        }
+
+        private void ColocarFlotaSinConfirmar(int idJugador)
+        {
+            for (int i = 0; i < BE.TIPONAVE.Flota.Length; i++)
+            {
+                partida.ColocarNave(idJugador, BE.TIPONAVE.Flota[i], i, 0, BE.ORIENTACION.Horizontal);
+            }
+        }
+
+        [TestMethod]
+        public void ColocarAlAzar_FueraDeTurno_Falla()
+        {
+            partida.Iniciar(ana, beto);
+            Assert.ThrowsException<Exception>(() => partida.ColocarAlAzar(beto.ID));
+        }
+
         // -------------------- Combate --------------------
 
         [TestMethod]
@@ -512,6 +660,88 @@ namespace Tests.Unitarios
             // Acorazados de beto: fila 4, columna 0.
             Assert.AreEqual(BE.ESTADOCELDA.Hundido, partida.Disparar(ana.ID, 4, 0));
             Assert.AreEqual(BE.ESTADOCELDA.Hundido, partida.ObtenerDisparosRecibidos(beto.ID)[4, 0]);
+        }
+
+        [TestMethod]
+        public void Disparos_SinDisparar_EstaVacioYNoHayUltimo()
+        {
+            IrAlCombate();
+            Assert.AreEqual(0, partida.Disparos.Count);
+            Assert.IsNull(partida.UltimoDisparo);
+            Assert.AreEqual(0, partida.NavesHundidas(beto.ID).Count);
+        }
+
+        [TestMethod]
+        public void Disparos_RegistraCadaDisparoEnOrden()
+        {
+            IrAlCombate();
+            partida.Disparar(ana.ID, 10, 10);   // agua
+            partida.Disparar(beto.ID, 0, 1);    // tocado (Batalla Naval de ana)
+            partida.Disparar(ana.ID, 4, 0);     // hundido (Acorazados de beto)
+
+            List<BE.DISPARO> lista = partida.Disparos;
+            Assert.AreEqual(3, lista.Count);
+
+            Assert.AreEqual(ana.ID, lista[0].IdAtacante);
+            Assert.AreEqual(BE.ESTADOCELDA.Agua, lista[0].Resultado);
+            Assert.IsNull(lista[0].NaveHundida);
+            Assert.AreEqual("K11", lista[0].Coordenada);
+
+            Assert.AreEqual(beto.ID, lista[1].IdAtacante);
+            Assert.AreEqual(BE.ESTADOCELDA.Tocado, lista[1].Resultado);
+            // En un tocado no se informa qué nave fue: eso lo sabe solo el defensor.
+            Assert.IsNull(lista[1].NaveHundida);
+            Assert.AreEqual("B1", lista[1].Coordenada);
+
+            Assert.AreEqual(BE.ESTADOCELDA.Hundido, lista[2].Resultado);
+            Assert.AreEqual("Acorazados", lista[2].NaveHundida.Nombre);
+            Assert.AreSame(lista[2], partida.UltimoDisparo);
+        }
+
+        [TestMethod]
+        public void Disparos_DevuelveUnaCopia()
+        {
+            IrAlCombate();
+            partida.Disparar(ana.ID, 10, 10);
+            partida.Disparos.Clear();
+            Assert.AreEqual(1, partida.Disparos.Count);
+        }
+
+        [TestMethod]
+        public void Disparar_Invalido_NoQuedaEnLosDisparos()
+        {
+            IrAlCombate();
+            partida.Disparar(ana.ID, 0, 0);
+            partida.Disparar(beto.ID, 14, 14);
+            Assert.ThrowsException<Exception>(() => partida.Disparar(ana.ID, 0, 0));
+            Assert.ThrowsException<Exception>(() => partida.Disparar(beto.ID, 1, 1));
+            Assert.AreEqual(2, partida.Disparos.Count);
+        }
+
+        [TestMethod]
+        public void NavesHundidas_SoloListaLasHundidasDelJugador()
+        {
+            IrAlCombate();
+            partida.Disparar(ana.ID, 4, 0);     // hunde Acorazados de beto
+            partida.Disparar(beto.ID, 3, 0);    // toca Buque de ana, no lo hunde
+
+            List<BE.TIPONAVE> hundidasBeto = partida.NavesHundidas(beto.ID);
+            Assert.AreEqual(1, hundidasBeto.Count);
+            Assert.AreEqual("Acorazados", hundidasBeto[0].Nombre);
+            Assert.AreEqual(0, partida.NavesHundidas(ana.ID).Count);
+        }
+
+        [TestMethod]
+        public void Iniciar_NuevaPartida_EmpiezaSinDisparos()
+        {
+            IrAlCombate();
+            partida.Disparar(ana.ID, 10, 10);
+            partida.Abandonar(beto.ID);
+            File.Delete(partida.Partida.RutaXml);
+
+            partida.Iniciar(ana, beto);
+            Assert.AreEqual(0, partida.Disparos.Count);
+            Assert.IsNull(partida.UltimoDisparo);
         }
 
         [TestMethod]

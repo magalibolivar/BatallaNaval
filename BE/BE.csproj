@@ -45,6 +45,7 @@
     <Compile Include="ORIENTACION.cs" />
     <Compile Include="ESTADOCELDA.cs" />
     <Compile Include="NAVECOLOCADA.cs" />
+    <Compile Include="DISPARO.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

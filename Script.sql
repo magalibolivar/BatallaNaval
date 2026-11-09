@@ -131,6 +131,20 @@ IF NOT EXISTS (SELECT 1 FROM [dbo].[USUARIO] WHERE Nombre = 'magali')
 	INSERT INTO [dbo].[USUARIO] (ID, Nombre, Contraseña) VALUES (4, 'magali', '1234')
 GO
 
+-- Usuarios invitados ("Jugar como invitado", sin usuario ni contraseña): el Jugador 1
+-- anónimo usa Invitado1 y el Jugador 2 anónimo, Invitado2. Existen como filas de USUARIO
+-- porque PARTIDA y LOG los referencian por clave foránea. La contraseña vacía no sirve
+-- para loguearse (USUARIO_LOGIN la rechaza) y el nombre no se puede registrar (ya existe).
+-- El ID se calcula con MAX+1 porque en una base ya usada los IDs bajos pueden estar ocupados.
+IF NOT EXISTS (SELECT 1 FROM [dbo].[USUARIO] WHERE Nombre = 'Invitado1')
+	INSERT INTO [dbo].[USUARIO] (ID, Nombre, Contraseña)
+	SELECT ISNULL(MAX(ID), 0) + 1, 'Invitado1', '' FROM [dbo].[USUARIO]
+GO
+IF NOT EXISTS (SELECT 1 FROM [dbo].[USUARIO] WHERE Nombre = 'Invitado2')
+	INSERT INTO [dbo].[USUARIO] (ID, Nombre, Contraseña)
+	SELECT ISNULL(MAX(ID), 0) + 1, 'Invitado2', '' FROM [dbo].[USUARIO]
+GO
+
 -- =========================================================
 -- STORED PROCEDURES
 -- (CREATE OR ALTER: siempre quedan actualizados, se puede
@@ -180,6 +194,17 @@ BEGIN
 	WHERE Nombre = @usu
 	  AND Contraseña = @pass COLLATE Latin1_General_CS_AS
 	  AND DATALENGTH(Contraseña) = DATALENGTH(@pass)
+	  -- Los invitados tienen contraseña vacía: con usuario y contraseña nunca se puede
+	  -- entrar como invitado (se entra con "Jugar como invitado").
+	  AND DATALENGTH(Contraseña) > 0
+END
+GO
+
+CREATE OR ALTER PROC [dbo].[USUARIO_BUSCAR_POR_NOMBRE]
+@usu nvarchar(50)
+AS
+BEGIN
+	SELECT ID, Nombre, Contraseña FROM USUARIO WHERE Nombre = @usu
 END
 GO
 

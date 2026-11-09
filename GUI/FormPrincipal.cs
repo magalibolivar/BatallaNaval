@@ -1,4 +1,7 @@
 using System;
+using System.Collections.Generic;
+using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Windows.Forms;
 using BE;
 
@@ -18,9 +21,15 @@ namespace GUI
             jugador1 = jugadorLogueado;
         }
 
+        private const int CANTIDAD_HISTORIAL = 5;
+        private const int ALTO_FILA_HISTORIAL = 42;
+
         private void FormPrincipal_Load(object sender, EventArgs e)
         {
-            lblJugador1.Text = "Jugador 1: " + jugador1.Nombre;
+            lblJugador1.Text = jugador1.Nombre;
+            lblAvatar1.Text = Inicial(jugador1.Nombre);
+            lblAvatar1.Tag = Branding.Primario;
+            MostrarChip(lblChip1, jugador1, "✓ Jugador 1");
             ActualizarPantalla();
         }
 
@@ -29,23 +38,207 @@ namespace GUI
             MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
 
+        // Se llama al abrir el menú, al cambiar el Jugador 2 y al terminar cada partida,
+        // así las estadísticas y el historial siempre muestran lo último.
         private void ActualizarPantalla()
         {
             if (jugador2 == null)
             {
-                lblJugador2.Text = "Jugador 2: (sin ingresar)";
+                lblJugador2.Text = "Jugador 2";
+                lblAvatar2.Text = "?";
+                lblAvatar2.Tag = Branding.TableroVacio;
+                lblAvatar2.ForeColor = Branding.Secundario;
                 lblChip2.Text = "pendiente";
-                lblChip2.ForeColor = System.Drawing.Color.FromArgb(138, 106, 156);
-                btnLoginJugador2.Text = "Ingresar Jugador 2";
+                lblChip2.ForeColor = Branding.Pendiente;
+                lblStats2.Text = "Todavía no ingresó";
+                btnLoginJugador2.Text = "Ingresar";
             }
             else
             {
-                lblJugador2.Text = "Jugador 2: " + jugador2.Nombre;
-                lblChip2.Text = "✓ activo";
-                lblChip2.ForeColor = System.Drawing.Color.FromArgb(47, 143, 91);
-                btnLoginJugador2.Text = "Cambiar Jugador 2";
+                lblJugador2.Text = jugador2.Nombre;
+                lblAvatar2.Text = Inicial(jugador2.Nombre);
+                lblAvatar2.Tag = Branding.Secundario;
+                lblAvatar2.ForeColor = Color.White;
+                MostrarChip(lblChip2, jugador2, "✓ Jugador 2");
+                btnLoginJugador2.Text = "Cambiar";
             }
-            btnComenzarPartida.Enabled = jugador2 != null;
+            lblAvatar2.Invalidate();
+
+            // Con FlatStyle, un botón deshabilitado sigue viéndose rosa: se le cambian los
+            // colores para que se note que todavía no se puede usar, y se explica por qué.
+            bool puedeComenzar = jugador2 != null;
+            btnComenzarPartida.Enabled = puedeComenzar;
+            btnComenzarPartida.BackColor = puedeComenzar ? Branding.Primario : Branding.TableroVacio;
+            lblAyudaComenzar.Text = puedeComenzar
+                ? "Primero coloca sus naves " + jugador1.Nombre + ", después " + jugador2.Nombre + "."
+                : "Ingresá al Jugador 2 para poder comenzar.";
+
+            CargarEstadisticas();
+        }
+
+        // Estadísticas de las tarjetas, cara a cara e historial. Si la base no responde, el
+        // menú sigue funcionando: solo se muestra que no se pudieron cargar.
+        private void CargarEstadisticas()
+        {
+            BLL.ESTADISTICA estadisticaBLL = new BLL.ESTADISTICA();
+            ESTADISTICA estadistica1 = null;
+            try
+            {
+                estadistica1 = estadisticaBLL.Calcular(jugador1);
+                lblStats1.Text = ResumenEstadistica(estadistica1);
+                if (jugador2 != null)
+                {
+                    lblStats2.Text = ResumenEstadistica(estadisticaBLL.Calcular(jugador2));
+
+                    Tuple<int, int> cara = estadisticaBLL.Enfrentamientos(jugador1, jugador2);
+                    lblCaraACara.Text = cara.Item1 + cara.Item2 == 0
+                        ? "Primera partida entre " + jugador1.Nombre + " y " + jugador2.Nombre
+                        : "Cara a cara:  " + jugador1.Nombre + "  " + cara.Item1 + " – " + cara.Item2 + "  " + jugador2.Nombre;
+                }
+                else
+                {
+                    lblCaraACara.Text = "";
+                }
+            }
+            catch (Exception)
+            {
+                lblStats1.Text = "Estadísticas no disponibles";
+                if (jugador2 != null)
+                {
+                    lblStats2.Text = "Estadísticas no disponibles";
+                }
+                lblCaraACara.Text = "";
+            }
+
+            lblSeccionHistorial.Text = "Últimas partidas de " + jugador1.Nombre;
+            MostrarHistorial(estadistica1 != null ? estadistica1.Historial : null);
+        }
+
+        private static string ResumenEstadistica(ESTADISTICA estadistica)
+        {
+            int total = estadistica.Ganadas + estadistica.Perdidas;
+            if (total == 0)
+            {
+                return "Sin partidas jugadas";
+            }
+            return estadistica.Ganadas + (estadistica.Ganadas == 1 ? " ganada" : " ganadas") + " · " +
+                estadistica.Perdidas + (estadistica.Perdidas == 1 ? " perdida" : " perdidas") +
+                " (" + estadistica.PromedioVictorias.ToString("0") + "%)";
+        }
+
+        // Una fila por partida (la más reciente arriba): insignia G/P, rival y fecha.
+        private void MostrarHistorial(List<FILAHISTORIAL> historial)
+        {
+            pnlHistorial.SuspendLayout();
+            while (pnlHistorial.Controls.Count > 0)
+            {
+                pnlHistorial.Controls[0].Dispose();
+            }
+
+            if (historial == null || historial.Count == 0)
+            {
+                Label vacio = new Label();
+                vacio.AutoSize = false;
+                vacio.Dock = DockStyle.Fill;
+                vacio.TextAlign = ContentAlignment.MiddleCenter;
+                vacio.ForeColor = Branding.Secundario;
+                vacio.Text = historial == null
+                    ? "No se pudo cargar el historial."
+                    : "Todavía no hay partidas.\n¡Jugá la primera!";
+                pnlHistorial.Controls.Add(vacio);
+            }
+            else
+            {
+                for (int i = 0; i < historial.Count && i < CANTIDAD_HISTORIAL; i++)
+                {
+                    AgregarFilaHistorial(historial[i], 4 + i * ALTO_FILA_HISTORIAL);
+                }
+            }
+            pnlHistorial.ResumeLayout();
+        }
+
+        private void AgregarFilaHistorial(FILAHISTORIAL fila, int y)
+        {
+            bool ganada = fila.Resultado == "Ganada";
+
+            Label insignia = new Label();
+            insignia.AutoSize = false;
+            insignia.Location = new Point(10, y + 7);
+            insignia.Size = new Size(26, 26);
+            insignia.TextAlign = ContentAlignment.MiddleCenter;
+            insignia.Font = new Font("Montserrat", 9F, FontStyle.Bold);
+            insignia.BackColor = ganada ? Branding.Primario : Branding.TableroVacio;
+            insignia.ForeColor = ganada ? Color.White : Branding.Secundario;
+            insignia.Text = ganada ? "G" : "P";
+            pnlHistorial.Controls.Add(insignia);
+
+            Label rival = new Label();
+            rival.AutoSize = true;
+            rival.Location = new Point(44, y + 3);
+            rival.Font = new Font("Montserrat", 9F, FontStyle.Bold);
+            rival.ForeColor = Branding.TextoPrincipal;
+            rival.Text = "vs " + fila.Rival;
+            pnlHistorial.Controls.Add(rival);
+
+            Label detalle = new Label();
+            detalle.AutoSize = true;
+            detalle.Location = new Point(44, y + 21);
+            detalle.Font = new Font("Montserrat", 8F);
+            detalle.ForeColor = Branding.Secundario;
+            detalle.Text = fila.Resultado + " · " + fila.Fecha;
+            pnlHistorial.Controls.Add(detalle);
+        }
+
+        // Un invitado se distingue de un usuario con cuenta: sus estadísticas son compartidas
+        // por todos los que juegan como ese invitado.
+        private void MostrarChip(Label chip, USUARIO jugador, string textoConCuenta)
+        {
+            bool invitado = BLL.USUARIO.EsInvitado(jugador);
+            chip.Text = invitado ? "Invitado" : textoConCuenta;
+            chip.ForeColor = invitado ? Branding.Pendiente : Branding.Exito;
+            toolTip.SetToolTip(chip, invitado
+                ? "Jugador sin cuenta: las partidas y estadísticas de " + jugador.Nombre + " son compartidas por todos los invitados."
+                : "");
+        }
+
+        private static string Inicial(string nombre)
+        {
+            return nombre.Length > 0 ? nombre.Substring(0, 1).ToUpper() : "?";
+        }
+
+        // Avatar redondo: círculo del color guardado en Tag con la inicial encima. Se dibuja
+        // a mano (en vez de recortar el control con Region) para que el borde quede suavizado.
+        private void DibujarAvatar(object sender, PaintEventArgs e)
+        {
+            Label avatar = (Label)sender;
+            Color color = avatar.Tag is Color ? (Color)avatar.Tag : Branding.Secundario;
+            e.Graphics.Clear(avatar.BackColor);
+            e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
+            using (SolidBrush pincel = new SolidBrush(color))
+            {
+                e.Graphics.FillEllipse(pincel, 0, 0, avatar.Width - 1, avatar.Height - 1);
+            }
+            TextRenderer.DrawText(e.Graphics, avatar.Text, avatar.Font, new Rectangle(0, 0, avatar.Width, avatar.Height),
+                avatar.ForeColor, TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter);
+        }
+
+        // Borde redondeado suave para las tarjetas de jugador y el panel del historial.
+        private void DibujarBorde(object sender, PaintEventArgs e)
+        {
+            Control control = (Control)sender;
+            e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
+            Rectangle rect = new Rectangle(0, 0, control.Width - 1, control.Height - 1);
+            using (GraphicsPath camino = new GraphicsPath())
+            using (Pen lapiz = new Pen(Branding.TableroVacio, 1.5F))
+            {
+                int d = 12;
+                camino.AddArc(rect.X, rect.Y, d, d, 180, 90);
+                camino.AddArc(rect.Right - d, rect.Y, d, d, 270, 90);
+                camino.AddArc(rect.Right - d, rect.Bottom - d, d, d, 0, 90);
+                camino.AddArc(rect.X, rect.Bottom - d, d, d, 90, 90);
+                camino.CloseFigure();
+                e.Graphics.DrawPath(lapiz, camino);
+            }
         }
 
         // -------------------- Alta de jugador 2 / inicio de partida --------------------
@@ -90,6 +283,9 @@ namespace GUI
             {
                 formPartida.ShowDialog(this);
             }
+
+            // La partida que terminó ya cuenta en las estadísticas y el historial.
+            ActualizarPantalla();
         }
 
         // -------------------- Menú superior --------------------
@@ -220,14 +416,23 @@ namespace GUI
 
         private void btnEstadisticas_Click(object sender, EventArgs e)
         {
-            FormEstadisticas formEstadisticas = new FormEstadisticas(jugador1, jugador2);
-            formEstadisticas.ShowDialog();
+            using (FormEstadisticas formEstadisticas = new FormEstadisticas(jugador1, jugador2))
+            {
+                formEstadisticas.ShowDialog(this);
+            }
+        }
+
+        private void lnkVerEstadisticas_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            btnEstadisticas_Click(sender, e);
         }
 
         private void btnReglas_Click(object sender, EventArgs e)
         {
-            FormReglas formReglas = new FormReglas();
-            formReglas.ShowDialog();
+            using (FormReglas formReglas = new FormReglas())
+            {
+                formReglas.ShowDialog(this);
+            }
         }
     }
 }

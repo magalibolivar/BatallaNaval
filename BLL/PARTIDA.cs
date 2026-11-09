@@ -43,6 +43,7 @@ namespace BLL
         private Dictionary<int, TableroJugador> tableros;
         private FASE_PARTIDA fase = FASE_PARTIDA.Finalizada;
         private int jugadorEnTurno;
+        private List<BE.DISPARO> disparos = new List<BE.DISPARO>();
 
         public event delPartidaFinalizada PartidaFinalizada;
 
@@ -108,6 +109,7 @@ namespace BLL
             tableros = new Dictionary<int, TableroJugador>();
             tableros[j1.ID] = new TableroJugador();
             tableros[j2.ID] = new TableroJugador();
+            disparos = new List<BE.DISPARO>();
 
             fase = FASE_PARTIDA.ColocandoJugador1;
         }
@@ -191,19 +193,93 @@ namespace BLL
             RecalcularOcupacion(tablero);
         }
 
+        // Saca una nave ya colocada del tablero (vuelve a quedar pendiente). Solo mientras
+        // el jugador no confirmó su flota.
+        public void QuitarNave(int idJugador, BE.TIPONAVE tipo)
+        {
+            if (!PuedeColocar(idJugador))
+            {
+                throw new Exception("No es el turno de colocación de este jugador.");
+            }
+
+            TableroJugador tablero = tableros[idJugador];
+            if (tablero.Naves.RemoveAll(n => n.Tipo.Id == tipo.Id) == 0)
+            {
+                throw new Exception("Esa nave todavía no está colocada.");
+            }
+            RecalcularOcupacion(tablero);
+        }
+
+        // Saca todas las naves del jugador para empezar la colocación de nuevo.
+        public void ReiniciarColocacion(int idJugador)
+        {
+            if (!PuedeColocar(idJugador))
+            {
+                throw new Exception("No es el turno de colocación de este jugador.");
+            }
+
+            TableroJugador tablero = tableros[idJugador];
+            tablero.Naves.Clear();
+            RecalcularOcupacion(tablero);
+        }
+
+        public void ColocarAlAzar(int idJugador)
+        {
+            ColocarAlAzar(idJugador, new Random());
+        }
+
+        // Coloca en posiciones al azar las naves que al jugador le faltan (las que ya puso
+        // quedan donde están). Se elige entre todas las posiciones válidas, de la nave más
+        // grande a la más chica, así nunca hace falta "reintentar" hasta que una entre.
+        // No confirma la flota: el jugador todavía puede corregirla.
+        public void ColocarAlAzar(int idJugador, Random azar)
+        {
+            if (!PuedeColocar(idJugador))
+            {
+                throw new Exception("No es el turno de colocación de este jugador.");
+            }
+
+            TableroJugador tablero = tableros[idJugador];
+            List<BE.TIPONAVE> pendientes = FlotaPendiente(idJugador);
+            pendientes.Sort((a, b) => b.Tamaño.CompareTo(a.Tamaño));
+
+            foreach (BE.TIPONAVE tipo in pendientes)
+            {
+                List<BE.NAVECOLOCADA> posibles = new List<BE.NAVECOLOCADA>();
+                foreach (BE.ORIENTACION orientacion in new[] { BE.ORIENTACION.Horizontal, BE.ORIENTACION.Vertical })
+                {
+                    for (int f = 0; f < TAMAÑO_TABLERO; f++)
+                    {
+                        for (int c = 0; c < TAMAÑO_TABLERO; c++)
+                        {
+                            if (PosicionValida(idJugador, tipo, f, c, orientacion))
+                            {
+                                posibles.Add(NuevaNave(tipo, f, c, orientacion));
+                            }
+                        }
+                    }
+                }
+
+                // Con 15 casilleros de naves en un tablero de 225 siempre hay lugar; se
+                // controla igual para no elegir de una lista vacía.
+                if (posibles.Count == 0)
+                {
+                    throw new Exception("No hay lugar en el tablero para la nave " + tipo.Nombre + ".");
+                }
+
+                tablero.Naves.Add(posibles[azar.Next(posibles.Count)]);
+                RecalcularOcupacion(tablero);
+            }
+        }
+
         // Sin modificar nada, indica si la nave entraría en esa posición (la GUI lo usa
         // para mostrar si el lugar es válido mientras se arrastra).
+        // No usa excepciones: se llama muchas veces seguidas (en cada movimiento del mouse y
+        // cientos de veces en "Al azar"), y lanzar/atrapar una excepción por cada posición
+        // inválida lo hacía lento y llenaba el depurador de excepciones de BLL.dll.
         public bool PosicionValida(int idJugador, BE.TIPONAVE tipo, int fila, int columna, BE.ORIENTACION orientacion)
         {
-            try
-            {
-                ValidarPosicion(tableros[idJugador], NuevaNave(tipo, fila, columna, orientacion));
-                return true;
-            }
-            catch (Exception)
-            {
-                return false;
-            }
+            return ErrorDePosicion(tableros[idJugador], NuevaNave(tipo, fila, columna, orientacion)) == null;
         }
 
         // Cierra la colocación del jugador: recién acá se graban en el XML las posiciones
@@ -252,11 +328,22 @@ namespace BLL
         // colocada) se ignora, así puede moverse o girar sobre sus propias celdas.
         private static void ValidarPosicion(TableroJugador tablero, BE.NAVECOLOCADA nave)
         {
-            foreach (Tuple<int, int> celda in nave.Celdas())
+            string error = ErrorDePosicion(tablero, nave);
+            if (error != null)
+            {
+                throw new Exception(error);
+            }
+        }
+
+        // Motivo por el que la nave no puede ir ahí, o null si la posición es válida.
+        private static string ErrorDePosicion(TableroJugador tablero, BE.NAVECOLOCADA nave)
+        {
+            List<Tuple<int, int>> celdasNave = nave.Celdas();
+            foreach (Tuple<int, int> celda in celdasNave)
             {
                 if (celda.Item1 < 0 || celda.Item1 >= TAMAÑO_TABLERO || celda.Item2 < 0 || celda.Item2 >= TAMAÑO_TABLERO)
                 {
-                    throw new Exception("La nave no entra en el tablero.");
+                    return "La nave no entra en el tablero.";
                 }
             }
             foreach (BE.NAVECOLOCADA otra in tablero.Naves)
@@ -269,12 +356,13 @@ namespace BLL
                 // (ver Reglas_de_Negocio_BatallaNaval.md, "Colocación").
                 foreach (Tuple<int, int> celda in otra.Celdas())
                 {
-                    if (nave.Celdas().Contains(celda))
+                    if (celdasNave.Contains(celda))
                     {
-                        throw new Exception("Esa nave se superpone con otra ya colocada.");
+                        return "Esa nave se superpone con otra ya colocada.";
                     }
                 }
             }
+            return null;
         }
 
         private static void RecalcularOcupacion(TableroJugador tablero)
@@ -320,6 +408,33 @@ namespace BLL
             List<BE.NAVECOLOCADA> naves = tableros[idJugador].Naves;
             int aFlote = naves.FindAll(n => !n.Hundida).Count;
             return aFlote + "/" + naves.Count + " naves a flote";
+        }
+
+        // Disparos de los 2 jugadores en el orden en que se hicieron (copia: la GUI no puede modificarla).
+        public List<BE.DISPARO> Disparos
+        {
+            get { return new List<BE.DISPARO>(disparos); }
+        }
+
+        // Último disparo de la partida (de cualquiera de los 2), o null si todavía no hubo ninguno.
+        public BE.DISPARO UltimoDisparo
+        {
+            get { return disparos.Count == 0 ? null : disparos[disparos.Count - 1]; }
+        }
+
+        // Tipos de nave de este jugador que ya fueron hundidos. No revela posiciones: el
+        // rival ya sabe qué naves hundió, porque cada hundimiento se anuncia con su nombre.
+        public List<BE.TIPONAVE> NavesHundidas(int idJugador)
+        {
+            List<BE.TIPONAVE> hundidas = new List<BE.TIPONAVE>();
+            foreach (BE.NAVECOLOCADA nave in tableros[idJugador].Naves)
+            {
+                if (nave.Hundida)
+                {
+                    hundidas.Add(nave.Tipo);
+                }
+            }
+            return hundidas;
         }
 
         public BE.ESTADOCELDA Disparar(int idJugadorAtacante, int fila, int columna)
@@ -383,6 +498,14 @@ namespace BLL
                 // ("ya fue disparada"), así que nunca se podría hundir.
                 tableroDefensor.DisparosRecibidos[fila, columna] = resultado;
             }
+
+            BE.DISPARO disparo = new BE.DISPARO();
+            disparo.IdAtacante = idJugadorAtacante;
+            disparo.Fila = fila;
+            disparo.Columna = columna;
+            disparo.Resultado = resultado;
+            disparo.NaveHundida = resultado == BE.ESTADOCELDA.Hundido ? naveImpactada.Tipo : null;
+            disparos.Add(disparo);
 
             if (resultado == BE.ESTADOCELDA.Hundido && tableroDefensor.Naves.TrueForAll(n => n.Hundida))
             {

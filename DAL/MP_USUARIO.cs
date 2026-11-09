@@ -64,12 +64,25 @@ namespace DAL
             acceso = new ACCESO();
             List<SqlParameter> parametros = new List<SqlParameter>();
             parametros.Add(acceso.CrearParametro("@id", id));
+            return LeerUno("USUARIO_BUSCAR_POR_ID", parametros);
+        }
 
+        // Devuelve null si no existe un usuario con ese nombre (se usa para los invitados).
+        public virtual BE.USUARIO BuscarPorNombre(string nombre)
+        {
+            acceso = new ACCESO();
+            List<SqlParameter> parametros = new List<SqlParameter>();
+            parametros.Add(acceso.CrearParametro("@usu", nombre));
+            return LeerUno("USUARIO_BUSCAR_POR_NOMBRE", parametros);
+        }
+
+        private BE.USUARIO LeerUno(string procedimiento, List<SqlParameter> parametros)
+        {
             acceso.Abrir();
             DataTable tabla;
             try
             {
-                tabla = acceso.Leer("USUARIO_BUSCAR_POR_ID", parametros);
+                tabla = acceso.Leer(procedimiento, parametros);
             }
             finally
             {

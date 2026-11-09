@@ -83,6 +83,55 @@ namespace Tests.Integracion
             Assert.IsNull(bll.BuscarPorId(999999));
         }
 
+        // -------------------- Invitados --------------------
+
+        [TestMethod]
+        public void Script_CreaLos2InvitadosConContraseñaVacia()
+        {
+            Assert.AreEqual(1, BaseDePrueba.Contar("SELECT COUNT(*) FROM USUARIO WHERE Nombre = 'Invitado1' AND Contraseña = ''"));
+            Assert.AreEqual(1, BaseDePrueba.Contar("SELECT COUNT(*) FROM USUARIO WHERE Nombre = 'Invitado2' AND Contraseña = ''"));
+        }
+
+        [TestMethod]
+        public void IngresarComoInvitado_DevuelveInvitadosDistintosYRegistraElInicio()
+        {
+            BE.USUARIO invitado1 = bll.IngresarComoInvitado(1);
+            BE.USUARIO invitado2 = bll.IngresarComoInvitado(2);
+
+            Assert.AreEqual("Invitado1", invitado1.Nombre);
+            Assert.AreEqual("Invitado2", invitado2.Nombre);
+            Assert.AreNotEqual(invitado1.ID, invitado2.ID);
+            Assert.IsTrue(LogsDe(invitado1.ID, BE.LOG.INICIO_SESION) >= 1);
+            Assert.IsTrue(LogsDe(invitado2.ID, BE.LOG.INICIO_SESION) >= 1);
+        }
+
+        [TestMethod]
+        public void Login_ConUsuarioYContraseña_NuncaEntraComoInvitado()
+        {
+            // Ni por la BLL ni llamando directo al SP con la contraseña vacía.
+            Assert.IsFalse(bll.Login(new BE.USUARIO { Nombre = "Invitado1", Contraseña = "" }));
+            Assert.IsFalse(new DAL.MP_USUARIO().Login(new BE.USUARIO { Nombre = "Invitado1", Contraseña = "" }));
+            Assert.IsFalse(new DAL.MP_USUARIO().Login(new BE.USUARIO { Nombre = "Invitado2", Contraseña = "" }));
+        }
+
+        [TestMethod]
+        public void Registrar_ConNombreDeInvitado_Falla()
+        {
+            int antes = BaseDePrueba.Contar("SELECT COUNT(*) FROM USUARIO");
+            Assert.ThrowsException<Exception>(() => bll.Insertar(new BE.USUARIO { Nombre = "invitado1", Contraseña = "clave1" }));
+            Assert.AreEqual(antes, BaseDePrueba.Contar("SELECT COUNT(*) FROM USUARIO"));
+        }
+
+        [TestMethod]
+        public void BuscarPorNombre_ExistenteEInexistente()
+        {
+            DAL.MP_USUARIO mapper = new DAL.MP_USUARIO();
+            BE.USUARIO valentina = mapper.BuscarPorNombre("valentina");
+            Assert.AreEqual(1, valentina.ID);
+            Assert.AreEqual("1234", valentina.Contraseña);
+            Assert.IsNull(mapper.BuscarPorNombre("noexiste"));
+        }
+
         [TestMethod]
         public void Bitacora_ConUsuarioInexistente_Falla()
         {

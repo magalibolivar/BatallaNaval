@@ -63,5 +63,31 @@ namespace BLL
 
             return estadistica;
         }
+
+        // Historial entre 2 jugadores (para el "cara a cara" del menú principal): cuántas
+        // partidas terminadas le ganó cada uno al otro. Item1 = ganadas por a, Item2 = por b.
+        public Tuple<int, int> Enfrentamientos(BE.USUARIO a, BE.USUARIO b)
+        {
+            int ganadasA = 0;
+            int ganadasB = 0;
+            foreach (BE.PARTIDA p in mapperPartida.ListarPorUsuario(a.ID))
+            {
+                bool entreEllos = (p.IdJugador1 == a.ID && p.IdJugador2 == b.ID)
+                    || (p.IdJugador1 == b.ID && p.IdJugador2 == a.ID);
+                if (!entreEllos)
+                {
+                    continue;
+                }
+                if (p.IdGanador == a.ID)
+                {
+                    ganadasA++;
+                }
+                else
+                {
+                    ganadasB++;
+                }
+            }
+            return Tuple.Create(ganadasA, ganadasB);
+        }
     }
 }

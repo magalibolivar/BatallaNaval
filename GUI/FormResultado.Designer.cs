@@ -58,7 +58,7 @@ namespace GUI
 
             this.lblTitulo.AutoSize = false;
             this.lblTitulo.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.lblTitulo.Font = new System.Drawing.Font("Segoe UI", 15F, System.Drawing.FontStyle.Bold);
+            this.lblTitulo.Font = new System.Drawing.Font("Montserrat", 15F, System.Drawing.FontStyle.Bold);
             this.lblTitulo.ForeColor = Branding.Primario;
             this.lblTitulo.Location = new System.Drawing.Point(20, 96);
             this.lblTitulo.Size = new System.Drawing.Size(240, 30);
@@ -80,7 +80,7 @@ namespace GUI
             this.lblJugador1Clave.Text = "Jugador 1";
             this.lblJugador1Valor.AutoSize = true;
             this.lblJugador1Valor.ForeColor = Branding.TextoPrincipal;
-            this.lblJugador1Valor.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
+            this.lblJugador1Valor.Font = new System.Drawing.Font("Montserrat", 9F, System.Drawing.FontStyle.Bold);
             this.lblJugador1Valor.Location = new System.Drawing.Point(140, 10);
 
             this.lblJugador2Clave.AutoSize = true;
@@ -89,7 +89,7 @@ namespace GUI
             this.lblJugador2Clave.Text = "Jugador 2";
             this.lblJugador2Valor.AutoSize = true;
             this.lblJugador2Valor.ForeColor = Branding.TextoPrincipal;
-            this.lblJugador2Valor.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
+            this.lblJugador2Valor.Font = new System.Drawing.Font("Montserrat", 9F, System.Drawing.FontStyle.Bold);
             this.lblJugador2Valor.Location = new System.Drawing.Point(140, 35);
 
             this.lblDuracionClave.AutoSize = true;
@@ -98,7 +98,7 @@ namespace GUI
             this.lblDuracionClave.Text = "Duración";
             this.lblDuracionValor.AutoSize = true;
             this.lblDuracionValor.ForeColor = Branding.TextoPrincipal;
-            this.lblDuracionValor.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
+            this.lblDuracionValor.Font = new System.Drawing.Font("Montserrat", 9F, System.Drawing.FontStyle.Bold);
             this.lblDuracionValor.Location = new System.Drawing.Point(140, 60);
 
             this.lblResultadoClave.AutoSize = true;
@@ -107,7 +107,7 @@ namespace GUI
             this.lblResultadoClave.Text = "Resultado";
             this.lblResultadoValor.AutoSize = true;
             this.lblResultadoValor.ForeColor = Branding.TextoPrincipal;
-            this.lblResultadoValor.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
+            this.lblResultadoValor.Font = new System.Drawing.Font("Montserrat", 9F, System.Drawing.FontStyle.Bold);
             this.lblResultadoValor.Location = new System.Drawing.Point(140, 85);
 
             this.pnlResumen.Controls.Add(this.lblJugador1Clave);
@@ -125,7 +125,7 @@ namespace GUI
             this.btnVerMovimientos.FlatAppearance.BorderSize = 0;
             this.btnVerMovimientos.BackColor = Branding.Primario;
             this.btnVerMovimientos.ForeColor = System.Drawing.Color.White;
-            this.btnVerMovimientos.Font = new System.Drawing.Font("Segoe UI", 9.5F, System.Drawing.FontStyle.Bold);
+            this.btnVerMovimientos.Font = new System.Drawing.Font("Montserrat", 9.5F, System.Drawing.FontStyle.Bold);
             this.btnVerMovimientos.Text = "Ver movimientos de esta partida";
             this.btnVerMovimientos.Click += new System.EventHandler(this.btnVerMovimientos_Click);
 

@@ -12,6 +12,9 @@ namespace GUI
         public static readonly Color FondoVentana = ColorHtml("#FCF9FB");
         public static readonly Color Panel = ColorHtml("#FFFFFF");
         public static readonly Color TextoPrincipal = ColorHtml("#392F46");
+        public static readonly Color PanelSuave = ColorHtml("#F8F2FA");
+        public static readonly Color Exito = ColorHtml("#2F8F5B");
+        public static readonly Color Pendiente = ColorHtml("#8A6A9C");
 
         public static readonly Color TableroVacio = ColorHtml("#EAF0F6");
         public static readonly Color TableroNave = ColorHtml("#8D79B4");

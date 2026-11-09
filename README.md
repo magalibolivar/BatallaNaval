@@ -54,12 +54,14 @@ Los carga `Script.sql`:
 | jugador3 | 1234 |
 | magali | 1234 |
 
-También se pueden crear usuarios nuevos con el botón "Registrarme" de la pantalla de login. El nombre de usuario lleva de 3 a 20 caracteres, sin espacios. La contraseña lleva de 4 a 20 caracteres y al menos un número.
+También se pueden crear usuarios nuevos con el enlace "Creá una" de la pantalla de login. El nombre de usuario lleva de 3 a 20 caracteres, sin espacios. La contraseña lleva de 4 a 20 caracteres y al menos un número.
+
+Para jugar sin cuenta está el botón **"Jugar como invitado"**: el Jugador 1 entra como `Invitado1` y el Jugador 2 como `Invitado2` (los crea `Script.sql`; en una base creada antes de este cambio hay que volver a correr el script). Las partidas de los invitados quedan registradas a su nombre.
 
 ## Cómo se juega
 
-1. Ingresar con el Jugador 1 (pantalla inicial).
-2. En la pantalla principal, "Ingresar Jugador 2" con **otro** usuario.
+1. Ingresar con el Jugador 1 (pantalla inicial), con usuario y contraseña o como invitado.
+2. En la pantalla principal, "Ingresar" el Jugador 2 con **otro** usuario (o como invitado).
 3. "Comenzar Partida". Cada jugador coloca sus 5 naves en su propio tablero (se pueden arrastrar para moverlas y girar con un click hasta presionar "Confirmar flota"; la app pide pasar el dispositivo entre jugador y jugador, para que ninguno vea el tablero del otro mientras coloca).
 4. Terminada la colocación, empieza el combate: en cada turno se dispara a una celda del tablero rival (que se ve sin revelar naves no tocadas) y se informa agua, tocado o hundido. El turno pasa siempre al otro jugador.
 5. Gana quien hunde las 5 naves del rival. También se puede abandonar con "Abandonar Partida": la gana el otro jugador.

@@ -87,5 +87,31 @@ namespace Tests.Unitarios
         {
             Assert.IsNotNull(new BLL.ESTADISTICA());
         }
+
+        [TestMethod]
+        public void Enfrentamientos_CuentaSoloLasPartidasEntreLos2()
+        {
+            BE.USUARIO beto = new BE.USUARIO { ID = 2, Nombre = "beto" };
+            DateTime d = new DateTime(2026, 3, 4, 15, 30, 0);
+            mapperPartida.PartidasDelUsuario.Add(Partida(1, 2, 1, d, 10, "a.xml"));          // ana gana a beto
+            mapperPartida.PartidasDelUsuario.Add(Partida(2, 1, 2, d.AddDays(1), 5, "b.xml")); // beto gana a ana
+            mapperPartida.PartidasDelUsuario.Add(Partida(2, 1, 1, d.AddDays(2), 5, "c.xml")); // ana gana a beto
+            mapperPartida.PartidasDelUsuario.Add(Partida(1, 9, 9, d.AddDays(3), 1, "d.xml")); // contra otro: no cuenta
+
+            Tuple<int, int> resultado = bll.Enfrentamientos(ana, beto);
+
+            Assert.AreEqual(1, mapperPartida.UsuarioListado);
+            Assert.AreEqual(2, resultado.Item1);
+            Assert.AreEqual(1, resultado.Item2);
+        }
+
+        [TestMethod]
+        public void Enfrentamientos_SinPartidasEntreEllos_EnCero()
+        {
+            mapperPartida.PartidasDelUsuario.Add(Partida(1, 9, 1, DateTime.Now, 1, "a.xml"));
+            Tuple<int, int> resultado = bll.Enfrentamientos(ana, new BE.USUARIO { ID = 2, Nombre = "beto" });
+            Assert.AreEqual(0, resultado.Item1);
+            Assert.AreEqual(0, resultado.Item2);
+        }
     }
 }
