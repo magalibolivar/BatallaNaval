@@ -58,7 +58,7 @@ namespace DAL
         // en una misma transacción. Devuelve false si no se pudo grabar (no queda nada a medias).
         // A diferencia de un juego con empate posible, acá idGanador siempre tiene un valor:
         // en Batalla Naval no hay empates (ver Reglas_de_Negocio_BatallaNaval.md).
-        public bool Finalizar(BE.PARTIDA partida, string descripcion)
+        public virtual bool Finalizar(BE.PARTIDA partida, string descripcion)
         {
             acceso = new ACCESO();
             List<SqlParameter> parametros = new List<SqlParameter>();
@@ -109,7 +109,7 @@ namespace DAL
         }
 
         // Partidas terminadas en las que participó el usuario (como jugador 1 o 2).
-        public List<BE.PARTIDA> ListarPorUsuario(int idUsuario)
+        public virtual List<BE.PARTIDA> ListarPorUsuario(int idUsuario)
         {
             acceso = new ACCESO();
             List<SqlParameter> parametros = new List<SqlParameter>();

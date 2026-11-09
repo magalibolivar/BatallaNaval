@@ -82,10 +82,10 @@ namespace GUI
 
         private void PartidaBLL_PartidaFinalizada(BE.PARTIDA partida, bool abandonada)
         {
-            string nombreGanador = partida.IdGanador == jugador1.ID ? jugador1.Nombre : jugador2.Nombre;
-            MessageBox.Show(
-                "Ganó " + nombreGanador + (abandonada ? " (la partida fue abandonada)." : "."),
-                "Fin de la partida", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            using (FormResultado formResultado = new FormResultado(partida, jugador1, jugador2, abandonada))
+            {
+                formResultado.ShowDialog(this);
+            }
             this.DialogResult = DialogResult.OK;
             this.Close();
         }

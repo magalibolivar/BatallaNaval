@@ -16,8 +16,11 @@ namespace GUI
         private System.Windows.Forms.PictureBox picLogo;
         private System.Windows.Forms.Label lblTituloBatalla;
         private System.Windows.Forms.Label lblTituloNaval;
+        private System.Windows.Forms.Panel pnlJugadores;
         private System.Windows.Forms.Label lblJugador1;
+        private System.Windows.Forms.Label lblChip1;
         private System.Windows.Forms.Label lblJugador2;
+        private System.Windows.Forms.Label lblChip2;
         private System.Windows.Forms.Button btnLoginJugador2;
         private System.Windows.Forms.Button btnComenzarPartida;
         private System.Windows.Forms.Button btnEstadisticas;
@@ -33,8 +36,11 @@ namespace GUI
             this.picLogo = new System.Windows.Forms.PictureBox();
             this.lblTituloBatalla = new System.Windows.Forms.Label();
             this.lblTituloNaval = new System.Windows.Forms.Label();
+            this.pnlJugadores = new System.Windows.Forms.Panel();
             this.lblJugador1 = new System.Windows.Forms.Label();
+            this.lblChip1 = new System.Windows.Forms.Label();
             this.lblJugador2 = new System.Windows.Forms.Label();
+            this.lblChip2 = new System.Windows.Forms.Label();
             this.btnLoginJugador2 = new System.Windows.Forms.Button();
             this.btnComenzarPartida = new System.Windows.Forms.Button();
             this.btnEstadisticas = new System.Windows.Forms.Button();
@@ -66,17 +72,38 @@ namespace GUI
             this.lblTituloNaval.Location = new System.Drawing.Point(105, 43);
             this.lblTituloNaval.Text = "NAVAL";
 
+            this.pnlJugadores.BackColor = System.Drawing.Color.FromArgb(248, 242, 250);
+            this.pnlJugadores.Location = new System.Drawing.Point(25, 88);
+            this.pnlJugadores.Size = new System.Drawing.Size(290, 58);
+
             this.lblJugador1.AutoSize = true;
             this.lblJugador1.ForeColor = Branding.TextoPrincipal;
-            this.lblJugador1.Location = new System.Drawing.Point(30, 90);
-            this.lblJugador1.Text = "Jugador 1:";
+            this.lblJugador1.Location = new System.Drawing.Point(14, 9);
+            this.lblJugador1.Text = "Jugador 1: ";
+
+            this.lblChip1.AutoSize = true;
+            this.lblChip1.ForeColor = System.Drawing.Color.FromArgb(47, 143, 91);
+            this.lblChip1.Font = new System.Drawing.Font("Segoe UI", 8F, System.Drawing.FontStyle.Bold);
+            this.lblChip1.Location = new System.Drawing.Point(230, 10);
+            this.lblChip1.Text = "✓ activo";
 
             this.lblJugador2.AutoSize = true;
             this.lblJugador2.ForeColor = Branding.TextoPrincipal;
-            this.lblJugador2.Location = new System.Drawing.Point(30, 115);
+            this.lblJugador2.Location = new System.Drawing.Point(14, 32);
             this.lblJugador2.Text = "Jugador 2: (sin ingresar)";
 
-            this.btnLoginJugador2.Location = new System.Drawing.Point(30, 150);
+            this.lblChip2.AutoSize = true;
+            this.lblChip2.ForeColor = System.Drawing.Color.FromArgb(138, 106, 156);
+            this.lblChip2.Font = new System.Drawing.Font("Segoe UI", 8F, System.Drawing.FontStyle.Bold);
+            this.lblChip2.Location = new System.Drawing.Point(230, 33);
+            this.lblChip2.Text = "pendiente";
+
+            this.pnlJugadores.Controls.Add(this.lblJugador1);
+            this.pnlJugadores.Controls.Add(this.lblChip1);
+            this.pnlJugadores.Controls.Add(this.lblJugador2);
+            this.pnlJugadores.Controls.Add(this.lblChip2);
+
+            this.btnLoginJugador2.Location = new System.Drawing.Point(25, 156);
             this.btnLoginJugador2.Size = new System.Drawing.Size(280, 32);
             this.btnLoginJugador2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnLoginJugador2.FlatAppearance.BorderColor = Branding.Secundario;
@@ -147,8 +174,7 @@ namespace GUI
             this.Controls.Add(this.picLogo);
             this.Controls.Add(this.lblTituloBatalla);
             this.Controls.Add(this.lblTituloNaval);
-            this.Controls.Add(this.lblJugador1);
-            this.Controls.Add(this.lblJugador2);
+            this.Controls.Add(this.pnlJugadores);
             this.Controls.Add(this.btnLoginJugador2);
             this.Controls.Add(this.btnComenzarPartida);
             this.Controls.Add(this.btnEstadisticas);

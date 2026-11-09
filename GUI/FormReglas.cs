@@ -13,10 +13,12 @@ namespace GUI
 "1. Cada jugador tiene un tablero propio de 15x15 y coloca 5 naves, una de cada tipo:\r\n" +
 "   Batalla Naval (5 casilleros), Portaaviones (4), Fragatas (3), Buque (2), Acorazados (1).\r\n\r\n" +
 "2. Las naves se colocan en forma horizontal o vertical. Pueden quedar pegadas entre sí,\r\n" +
-"   pero no pueden superponerse ni salirse del tablero.\r\n\r\n" +
+"   pero no pueden superponerse ni salirse del tablero. Antes de confirmar la flota se\r\n" +
+"   puede corregir cada nave: arrastrándola (manteniendo apretado el click) se mueve, y\r\n" +
+"   con un click sobre ella se gira. \"Confirmar flota\" cierra la colocación.\r\n\r\n" +
 "3. Mientras un jugador coloca sus naves, el otro no puede ver su tablero: la aplicación\r\n" +
 "   muestra una pantalla para pasar el dispositivo antes de cada colocación.\r\n\r\n" +
-"4. Terminada la colocación de los 2 jugadores, empieza el combate. En su turno, un\r\n" +
+"4. Cuando los 2 jugadores confirmaron su flota, empieza el combate. En su turno, un\r\n" +
 "   jugador dispara a una casilla del tablero del rival (que se ve como niebla: solo se\r\n" +
 "   conocen los disparos ya hechos, nunca una nave no tocada).\r\n\r\n" +
 "5. Cada disparo informa el resultado: Agua (no había nada), Tocado (una nave recibió un\r\n" +

@@ -16,14 +16,17 @@ namespace DAL
 
         // Instancias de SQL Server que se prueban si la del App.config no responde:
         // con nombre (SQL Express) o la instancia por defecto (como en las compus de la facu).
-        private static readonly string[] servidoresAlternativos = { @".\SQLEXPRESS", "." };
+        // (internal y no readonly solo para que los tests puedan reemplazarlas)
+        internal static string[] servidoresAlternativos = { @".\SQLEXPRESS", "." };
 
         // Servidor que respondió la primera vez; se reutiliza para no volver a probar.
-        private static string servidorResuelto;
+        internal static string servidorResuelto;
 
         // Además se guarda en un archivo de esta compu, así en la próxima ejecución se prueba
-        // primero y no hay que esperar a que fallen los que no existen.
-        private static readonly string archivoServidor = Path.Combine(
+        // primero y no hay que esperar a que fallen los que no existen. El archivo guarda
+        // en la primera línea el Data Source del App.config y en la segunda el que respondió:
+        // si alguien cambia el App.config, lo recordado deja de valer y se vuelve a resolver.
+        internal static string archivoServidor = Path.Combine(
             Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "BatallaNaval", "servidor.txt");
 
         // La cadena de conexión se lee del App.config de la GUI (connectionStrings "BATALLANAVAL"),
@@ -37,22 +40,25 @@ namespace DAL
             return cadena.ConnectionString;
         }
 
-        // Prueba primero el servidor que funcionó la última vez en esta compu, después el
-        // Data Source del App.config y por último las alternativas, y se queda con el primero
-        // donde se pueda abrir la base BATALLANAVAL.
         private static string ResolverServidor()
         {
             if (servidorResuelto != null)
             {
                 return servidorResuelto;
             }
+            return ResolverServidor(ConfigurationManager.ConnectionStrings["BATALLANAVAL"].ConnectionString);
+        }
 
-            SqlConnectionStringBuilder cadena = new SqlConnectionStringBuilder(
-                ConfigurationManager.ConnectionStrings["BATALLANAVAL"].ConnectionString);
+        // Prueba primero el servidor que funcionó la última vez en esta compu (si el App.config
+        // no cambió desde entonces), después el Data Source del App.config y por último las
+        // alternativas, y se queda con el primero donde se pueda abrir la base BATALLANAVAL.
+        internal static string ResolverServidor(string cadenaConfigurada)
+        {
+            SqlConnectionStringBuilder cadena = new SqlConnectionStringBuilder(cadenaConfigurada);
             string configurado = cadena.DataSource;
 
             List<string> candidatos = new List<string>();
-            string recordado = LeerServidorRecordado();
+            string recordado = LeerServidorRecordado(configurado);
             if (recordado != null)
             {
                 candidatos.Add(recordado);
@@ -82,7 +88,7 @@ namespace DAL
                     servidorResuelto = servidor;
                     if (servidor != recordado)
                     {
-                        GuardarServidorRecordado(servidor);
+                        GuardarServidorRecordado(configurado, servidor);
                     }
                     return servidorResuelto;
                 }
@@ -96,17 +102,18 @@ namespace DAL
             return configurado;
         }
 
-        // Si el archivo no existe o no se puede leer, no hay servidor recordado y se prueban los demás.
-        private static string LeerServidorRecordado()
+        // Si el archivo no existe, no se puede leer o se guardó con otro App.config,
+        // no hay servidor recordado y se prueban los demás.
+        private static string LeerServidorRecordado(string configurado)
         {
             try
             {
                 if (File.Exists(archivoServidor))
                 {
-                    string servidor = File.ReadAllText(archivoServidor).Trim();
-                    if (servidor != "")
+                    string[] lineas = File.ReadAllLines(archivoServidor);
+                    if (lineas.Length >= 2 && lineas[0].Trim() == configurado && lineas[1].Trim() != "")
                     {
-                        return servidor;
+                        return lineas[1].Trim();
                     }
                 }
             }
@@ -117,12 +124,12 @@ namespace DAL
         }
 
         // Si no se puede guardar no pasa nada: la próxima vez se vuelve a probar.
-        private static void GuardarServidorRecordado(string servidor)
+        private static void GuardarServidorRecordado(string configurado, string servidor)
         {
             try
             {
                 Directory.CreateDirectory(Path.GetDirectoryName(archivoServidor));
-                File.WriteAllText(archivoServidor, servidor);
+                File.WriteAllLines(archivoServidor, new string[] { configurado, servidor });
             }
             catch (Exception)
             {
@@ -245,15 +252,6 @@ namespace DAL
             SqlParameter parametro = new SqlParameter();
             parametro.ParameterName = nombre;
             parametro.Value = valor;
-            parametro.DbType = DbType.Int32;
-            return parametro;
-        }
-
-        public SqlParameter CrearParametroNulo(string nombre)
-        {
-            SqlParameter parametro = new SqlParameter();
-            parametro.ParameterName = nombre;
-            parametro.Value = DBNull.Value;
             parametro.DbType = DbType.Int32;
             return parametro;
         }

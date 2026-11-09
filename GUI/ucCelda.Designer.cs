@@ -17,7 +17,6 @@ namespace GUI
         {
             this.SuspendLayout();
 
-            this.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.Cursor = System.Windows.Forms.Cursors.Hand;
             this.Margin = new System.Windows.Forms.Padding(0);
             this.Size = new System.Drawing.Size(24, 24);

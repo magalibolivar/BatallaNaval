@@ -10,12 +10,26 @@ namespace BLL
         public const int MIN_CONTRASEÑA = 4;
         public const int MAX_CONTRASEÑA = 20;
 
-        private DAL.MP_USUARIO mapper = new DAL.MP_USUARIO();
+        private DAL.MP_USUARIO mapper;
+
+        public USUARIO() : this(new DAL.MP_USUARIO())
+        {
+        }
+
+        // Los tests pasan un mapper falso para probar las reglas sin base de datos.
+        internal USUARIO(DAL.MP_USUARIO mapper)
+        {
+            this.mapper = mapper;
+        }
 
         // Reglas para registrar un usuario nuevo. Devuelve "" si está bien,
         // o el motivo por el que no se puede registrar.
         public string ValidarRegistro(BE.USUARIO usuario)
         {
+            if (usuario.Nombre == null || usuario.Contraseña == null)
+            {
+                return "Falta completar el nombre de usuario o la contraseña";
+            }
             if (usuario.Nombre.Contains(" "))
             {
                 return "El nombre de usuario no puede tener espacios";

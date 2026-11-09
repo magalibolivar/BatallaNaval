@@ -37,7 +37,7 @@ namespace GUI
             this.btnAbandonar.Text = "Abandonar partida";
             this.btnAbandonar.Click += new System.EventHandler(this.btnAbandonar_Click);
 
-            this.ClientSize = new System.Drawing.Size(620, 480);
+            this.ClientSize = new System.Drawing.Size(670, 540);
             this.Controls.Add(this.btnAbandonar);
             this.Controls.Add(this.pnlContenido);
             this.MinimizeBox = false;

@@ -21,11 +21,13 @@ Reglas que implementa la aplicación. Donde la consigna no especifica algo, la d
   | Acorazados | 1 |
 
 - Las naves se colocan en forma horizontal o vertical, eligiendo la celda donde empiezan. Se permite que dos naves queden **adyacentes** (pegadas); solo se prohíbe que se **superpongan** o que alguna celda quede fuera del tablero.
+- Mientras el jugador no confirme su flota, puede **corregir** cualquier nave ya colocada: manteniendo apretado el click sobre ella y arrastrándola la mueve a otra posición, y con un click (sin arrastrar) la gira entre horizontal y vertical. Cada cambio se valida con las mismas reglas (no superponerse, no salirse del tablero); si no es válido, la nave vuelve a donde estaba.
+- Con las 5 naves en el tablero, el jugador presiona **"Confirmar flota"** para cerrar su colocación. Recién ahí pasa el turno de colocación al otro jugador (o empieza el combate), y desde ese momento ya no puede modificar sus naves.
 
 ## 3. Información oculta durante la colocación
 
 - Mientras un jugador coloca sus naves, el otro **no puede ver ese tablero**. Antes de que cada jugador empiece a colocar, la aplicación muestra una pantalla neutra ("Jugador X: coloca tus naves — pasá el dispositivo y presioná Continuar") y solo después de confirmarla se dibuja el tablero de ese jugador con sus naves.
-- Terminada la colocación de los 2 jugadores (10 naves en total), empieza automáticamente el combate.
+- Cuando los 2 jugadores confirmaron su flota (10 naves en total), empieza el combate.
 
 ## 4. Mecánica de combate
 
@@ -38,7 +40,7 @@ Reglas que implementa la aplicación. Donde la consigna no especifica algo, la d
 ## 5. Bitácora y estadísticas
 
 - Se registra en la bitácora: inicio de sesión, cierre de sesión, inicio de partida y fin de partida (de ambos jugadores en cada evento de partida).
-- Todos los movimientos de cada partida se graban en un archivo XML propio de esa partida: cada **colocación** de nave (jugador, nave, posición y orientación), cada **disparo** (jugador, celda, resultado y, si corresponde, qué nave fue tocada/hundida) y el **cierre** (ganador y si fue por abandono), todos con fecha y hora. Se consultan desde Estadísticas → "Ver movimientos".
+- Todos los movimientos de cada partida se graban en un archivo XML propio de esa partida: cada **colocación** de nave (jugador, nave, posición y orientación finales, grabadas al confirmar la flota), cada **disparo** (jugador, celda, resultado y, si corresponde, qué nave fue tocada/hundida) y el **cierre** (ganador y si fue por abandono), todos con fecha y hora. Se consultan desde Estadísticas → "Ver movimientos".
 - Las estadísticas por jugador muestran: partidas ganadas / perdidas / empatadas, porcentaje de victorias, y tiempo total acumulado jugado (suma de la duración de todas sus partidas terminadas).
 
 ## 6. Empates
@@ -54,5 +56,6 @@ La consigna pide "Batalla Naval para 2 jugadores" con turnos, tablero de 15x15, 
 - **Una nave de cada tipo por jugador (5 naves, 15 casilleros de 225).** La consigna lista 5 tipos de nave con su tamaño, pero no dice cuántas de cada una. Se tomó la lectura literal (una de cada una) para acotar el alcance: una flota más grande agregaría más casos de validación (superposición, cantidad de naves hundidas para terminar la partida) sin que la consigna lo pida.
 - **Las naves pueden quedar adyacentes.** Se permite que dos naves se toquen; solo se prohíbe que se superpongan o salgan del tablero. Es la misma lógica que en Generala se usa para simplificar reglas no exigidas explícitamente por la consigna (ahí, el bonus de "tirada servida").
 - **El turno siempre alterna tras cada disparo**, sin disparo extra por acierto (una variante de casa frecuente en Batalla Naval). Se eligió la versión sin bonus porque es la que requiere menos estado para administrar turnos y la consigna no la pide.
+- **Corrección de la colocación y confirmación explícita.** Antes, la colocación de un jugador terminaba sola al poner la quinta nave, así que esa última no se podía corregir. Por eso la colocación se cierra con el botón "Confirmar flota" y, hasta entonces, las naves se pueden arrastrar y girar. El giro es con un click sobre la nave (reemplaza al botón "Orientación", que quedaba lejos del tablero y obligaba a decidir la orientación antes de ver dónde entraba la nave): toda nave nueva entra en horizontal y, si se hace click muy cerca del borde derecho, se corre hacia la izquierda para que entre. En el XML se graba la posición **final** de cada nave al confirmar, no cada corrección intermedia, porque los movimientos de la partida que interesa consultar son las posiciones con las que se jugó, no los reacomodos previos.
 - **No hay empates.** Es una consecuencia de las reglas anteriores (turnos alternados, hundimiento total de la flota rival como única condición de fin, y el abandono siempre resuelve un ganador), no una decisión aislada — ver sección 6.
 - **Nombre de usuario: de 3 a 20 caracteres, sin espacios. Contraseña: de 4 a 20 caracteres, con al menos un número** (el resto puede ser cualquier carácter), con la misma lógica que el TP de referencia. Las reglas las valida `BLL.USUARIO.ValidarRegistro`, que se usa en el formulario de registro y también dentro de `BLL.USUARIO.Insertar`, y los campos de login y registro no dejan escribir más de 20 caracteres.

@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 
 namespace BLL
@@ -25,7 +25,17 @@ namespace BLL
             public List<BE.NAVECOLOCADA> Naves = new List<BE.NAVECOLOCADA>();
         }
 
-        private DAL.MP_PARTIDA mapper = new DAL.MP_PARTIDA();
+        private DAL.MP_PARTIDA mapper;
+
+        public PARTIDA() : this(new DAL.MP_PARTIDA())
+        {
+        }
+
+        // Los tests pasan un mapper falso para probar el motor sin base de datos.
+        internal PARTIDA(DAL.MP_PARTIDA mapper)
+        {
+            this.mapper = mapper;
+        }
 
         private BE.PARTIDA partida;
         private BE.USUARIO jugador1;
@@ -66,6 +76,11 @@ namespace BLL
 
         public void Iniciar(BE.USUARIO j1, BE.USUARIO j2)
         {
+            // Si se iniciara otra encima, la anterior quedaría en la base sin terminar nunca.
+            if (EnCurso)
+            {
+                throw new Exception("Ya hay una partida en curso.");
+            }
             if (j1.ID == j2.ID)
             {
                 throw new Exception("Los dos jugadores tienen que ser distintos.");
@@ -125,6 +140,12 @@ namespace BLL
             return tableros[idJugador].Naves;
         }
 
+        // true cuando el jugador ya tiene las 5 naves en el tablero y puede confirmar su flota.
+        public bool FlotaCompleta(int idJugador)
+        {
+            return tableros[idJugador].Naves.Count == BE.TIPONAVE.Flota.Length;
+        }
+
         public void ColocarNave(int idJugador, BE.TIPONAVE tipo, int fila, int columna, BE.ORIENTACION orientacion)
         {
             if (!PuedeColocar(idJugador))
@@ -138,46 +159,132 @@ namespace BLL
                 throw new Exception("Esa nave ya está colocada.");
             }
 
+            BE.NAVECOLOCADA nave = NuevaNave(tipo, fila, columna, orientacion);
+            ValidarPosicion(tablero, nave);
+
+            tablero.Naves.Add(nave);
+            RecalcularOcupacion(tablero);
+        }
+
+        // Cambia la posición y/o la orientación de una nave ya colocada (arrastrarla o
+        // girarla en la pantalla de colocación). Solo se puede mientras el jugador no
+        // confirmó su flota; la nave no choca consigo misma, solo con las demás.
+        public void MoverNave(int idJugador, BE.TIPONAVE tipo, int fila, int columna, BE.ORIENTACION orientacion)
+        {
+            if (!PuedeColocar(idJugador))
+            {
+                throw new Exception("No es el turno de colocación de este jugador.");
+            }
+
+            TableroJugador tablero = tableros[idJugador];
+            BE.NAVECOLOCADA existente = tablero.Naves.Find(n => n.Tipo.Id == tipo.Id);
+            if (existente == null)
+            {
+                throw new Exception("Esa nave todavía no está colocada.");
+            }
+
+            ValidarPosicion(tablero, NuevaNave(tipo, fila, columna, orientacion));
+
+            existente.Fila = fila;
+            existente.Columna = columna;
+            existente.Orientacion = orientacion;
+            RecalcularOcupacion(tablero);
+        }
+
+        // Sin modificar nada, indica si la nave entraría en esa posición (la GUI lo usa
+        // para mostrar si el lugar es válido mientras se arrastra).
+        public bool PosicionValida(int idJugador, BE.TIPONAVE tipo, int fila, int columna, BE.ORIENTACION orientacion)
+        {
+            try
+            {
+                ValidarPosicion(tableros[idJugador], NuevaNave(tipo, fila, columna, orientacion));
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
+        // Cierra la colocación del jugador: recién acá se graban en el XML las posiciones
+        // finales de sus 5 naves y se pasa al otro jugador (o al combate). Ver
+        // Reglas_de_Negocio_BatallaNaval.md, "Corrección de la colocación".
+        public void ConfirmarColocacion(int idJugador)
+        {
+            if (!PuedeColocar(idJugador))
+            {
+                throw new Exception("No es el turno de colocación de este jugador.");
+            }
+            if (!FlotaCompleta(idJugador))
+            {
+                throw new Exception("Todavía faltan colocar naves.");
+            }
+
+            // Se escribe el XML antes de cambiar de fase: si falla, la colocación sigue abierta.
+            string nombre = UsuarioDe(idJugador).Nombre;
+            foreach (BE.NAVECOLOCADA nave in tableros[idJugador].Naves)
+            {
+                BLL.MOVIMIENTOXML.RegistrarColocacion(partida.RutaXml, nombre, nave.Tipo, nave.Fila, nave.Columna, nave.Orientacion);
+            }
+
+            if (fase == FASE_PARTIDA.ColocandoJugador1)
+            {
+                fase = FASE_PARTIDA.ColocandoJugador2;
+            }
+            else
+            {
+                fase = FASE_PARTIDA.Combate;
+                jugadorEnTurno = jugador1.ID;
+            }
+        }
+
+        private static BE.NAVECOLOCADA NuevaNave(BE.TIPONAVE tipo, int fila, int columna, BE.ORIENTACION orientacion)
+        {
             BE.NAVECOLOCADA nave = new BE.NAVECOLOCADA();
             nave.Tipo = tipo;
             nave.Fila = fila;
             nave.Columna = columna;
             nave.Orientacion = orientacion;
+            return nave;
+        }
 
-            List<Tuple<int, int>> celdas = nave.Celdas();
-            foreach (Tuple<int, int> celda in celdas)
+        // Valida contra las demás naves del tablero; la nave del mismo tipo (si ya estaba
+        // colocada) se ignora, así puede moverse o girar sobre sus propias celdas.
+        private static void ValidarPosicion(TableroJugador tablero, BE.NAVECOLOCADA nave)
+        {
+            foreach (Tuple<int, int> celda in nave.Celdas())
             {
                 if (celda.Item1 < 0 || celda.Item1 >= TAMAÑO_TABLERO || celda.Item2 < 0 || celda.Item2 >= TAMAÑO_TABLERO)
                 {
                     throw new Exception("La nave no entra en el tablero.");
                 }
+            }
+            foreach (BE.NAVECOLOCADA otra in tablero.Naves)
+            {
+                if (otra.Tipo.Id == nave.Tipo.Id)
+                {
+                    continue;
+                }
                 // Se permite que las naves queden adyacentes: solo se prohíbe que se superpongan
                 // (ver Reglas_de_Negocio_BatallaNaval.md, "Colocación").
-                if (tablero.Ocupacion[celda.Item1, celda.Item2])
+                foreach (Tuple<int, int> celda in otra.Celdas())
                 {
-                    throw new Exception("Esa nave se superpone con otra ya colocada.");
+                    if (nave.Celdas().Contains(celda))
+                    {
+                        throw new Exception("Esa nave se superpone con otra ya colocada.");
+                    }
                 }
             }
+        }
 
-            // Se escribe el XML antes de mutar el estado en memoria: si falla, la colocación no cuenta.
-            BLL.MOVIMIENTOXML.RegistrarColocacion(partida.RutaXml, UsuarioDe(idJugador).Nombre, tipo, fila, columna, orientacion);
-
-            foreach (Tuple<int, int> celda in celdas)
+        private static void RecalcularOcupacion(TableroJugador tablero)
+        {
+            tablero.Ocupacion = new bool[TAMAÑO_TABLERO, TAMAÑO_TABLERO];
+            foreach (BE.NAVECOLOCADA nave in tablero.Naves)
             {
-                tablero.Ocupacion[celda.Item1, celda.Item2] = true;
-            }
-            tablero.Naves.Add(nave);
-
-            if (tablero.Naves.Count == BE.TIPONAVE.Flota.Length)
-            {
-                if (fase == FASE_PARTIDA.ColocandoJugador1)
+                foreach (Tuple<int, int> celda in nave.Celdas())
                 {
-                    fase = FASE_PARTIDA.ColocandoJugador2;
-                }
-                else if (fase == FASE_PARTIDA.ColocandoJugador2)
-                {
-                    fase = FASE_PARTIDA.Combate;
-                    jugadorEnTurno = jugador1.ID;
+                    tablero.Ocupacion[celda.Item1, celda.Item2] = true;
                 }
             }
         }
@@ -192,7 +299,20 @@ namespace BLL
         // Tablero enemigo tal como lo ve idJugadorQueMira: nunca expone una nave no tocada.
         public BE.ESTADOCELDA[,] ObtenerTableroEnemigoFog(int idJugadorQueMira)
         {
-            return tableros[Otro(idJugadorQueMira)].DisparosRecibidos;
+            return ObtenerDisparosRecibidos(Otro(idJugadorQueMira));
+        }
+
+        // Tablero propio durante el combate: a diferencia del tablero enemigo, acá sí se
+        // puede mostrar dónde están las naves, porque el jugador ya las colocó él mismo
+        // (no hay nada que ocultarle a sí mismo).
+        public bool[,] ObtenerOcupacionPropia(int idJugador)
+        {
+            return (bool[,])tableros[idJugador].Ocupacion.Clone();
+        }
+
+        public BE.ESTADOCELDA[,] ObtenerDisparosRecibidos(int idJugador)
+        {
+            return (BE.ESTADOCELDA[,])tableros[idJugador].DisparosRecibidos.Clone();
         }
 
         public string ResumenFlota(int idJugador)
@@ -246,13 +366,21 @@ namespace BLL
             if (naveImpactada != null)
             {
                 naveImpactada.CantidadImpactos++;
+            }
+
+            if (resultado == BE.ESTADOCELDA.Hundido)
+            {
+                // Recién al hundirse se marca la nave entera (todas sus celdas ya estaban tocadas).
                 foreach (Tuple<int, int> celda in naveImpactada.Celdas())
                 {
-                    tableroDefensor.DisparosRecibidos[celda.Item1, celda.Item2] = resultado;
+                    tableroDefensor.DisparosRecibidos[celda.Item1, celda.Item2] = BE.ESTADOCELDA.Hundido;
                 }
             }
             else
             {
+                // Agua o Tocado: solo la celda disparada. Marcar toda la nave como tocada
+                // revelaría su posición en la niebla y bloquearía el resto de sus celdas
+                // ("ya fue disparada"), así que nunca se podría hundir.
                 tableroDefensor.DisparosRecibidos[fila, columna] = resultado;
             }
 
@@ -272,6 +400,10 @@ namespace BLL
 
         public void Abandonar(int idJugadorQueAbandona)
         {
+            if (!EnCurso)
+            {
+                throw new Exception("No hay ninguna partida en curso.");
+            }
             if (idJugadorQueAbandona != jugador1.ID && idJugadorQueAbandona != jugador2.ID)
             {
                 throw new Exception("Ese jugador no participa de esta partida.");

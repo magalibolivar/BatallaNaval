@@ -13,18 +13,23 @@ namespace GUI
             base.Dispose(disposing);
         }
 
+        public static readonly System.Drawing.Point OrigenTableroPropio = new System.Drawing.Point(20, 62);
+        public static readonly System.Drawing.Point OrigenTableroEnemigo = new System.Drawing.Point(330, 62);
+
         private System.Windows.Forms.Label lblTurno;
-        private System.Windows.Forms.Panel pnlTablero;
-        private System.Windows.Forms.Label lblResumenPropio;
-        private System.Windows.Forms.Label lblResumenRival;
+        private System.Windows.Forms.Label lblHeaderPropio;
+        private System.Windows.Forms.Panel pnlTableroPropio;
+        private System.Windows.Forms.Label lblHeaderEnemigo;
+        private System.Windows.Forms.Panel pnlTableroEnemigo;
         private System.Windows.Forms.Label lblResultado;
 
         private void InitializeComponent()
         {
             this.lblTurno = new System.Windows.Forms.Label();
-            this.pnlTablero = new System.Windows.Forms.Panel();
-            this.lblResumenPropio = new System.Windows.Forms.Label();
-            this.lblResumenRival = new System.Windows.Forms.Label();
+            this.lblHeaderPropio = new System.Windows.Forms.Label();
+            this.pnlTableroPropio = new System.Windows.Forms.Panel();
+            this.lblHeaderEnemigo = new System.Windows.Forms.Label();
+            this.pnlTableroEnemigo = new System.Windows.Forms.Panel();
             this.lblResultado = new System.Windows.Forms.Label();
             this.SuspendLayout();
 
@@ -35,31 +40,40 @@ namespace GUI
             this.lblTurno.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold);
             this.lblTurno.Location = new System.Drawing.Point(0, 0);
 
-            this.pnlTablero.Location = new System.Drawing.Point(0, 30);
-            this.pnlTablero.Size = new System.Drawing.Size(361, 361);
-            this.pnlTablero.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.pnlTablero.BackColor = Branding.Panel;
+            this.lblHeaderPropio.AutoSize = true;
+            this.lblHeaderPropio.ForeColor = Branding.TextoPrincipal;
+            this.lblHeaderPropio.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
+            this.lblHeaderPropio.Location = new System.Drawing.Point(OrigenTableroPropio.X, 28);
 
-            this.lblResumenPropio.AutoSize = true;
-            this.lblResumenPropio.ForeColor = Branding.TextoPrincipal;
-            this.lblResumenPropio.Location = new System.Drawing.Point(375, 30);
+            this.pnlTableroPropio.Location = OrigenTableroPropio;
+            this.pnlTableroPropio.Size = new System.Drawing.Size(271, 271);
+            this.pnlTableroPropio.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.pnlTableroPropio.BackColor = Branding.Panel;
 
-            this.lblResumenRival.AutoSize = true;
-            this.lblResumenRival.ForeColor = Branding.TextoPrincipal;
-            this.lblResumenRival.Location = new System.Drawing.Point(375, 55);
+            this.lblHeaderEnemigo.AutoSize = true;
+            this.lblHeaderEnemigo.ForeColor = Branding.TextoPrincipal;
+            this.lblHeaderEnemigo.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
+            this.lblHeaderEnemigo.Location = new System.Drawing.Point(OrigenTableroEnemigo.X, 28);
+
+            this.pnlTableroEnemigo.Location = OrigenTableroEnemigo;
+            this.pnlTableroEnemigo.Size = new System.Drawing.Size(271, 271);
+            this.pnlTableroEnemigo.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.pnlTableroEnemigo.BackColor = Branding.Panel;
 
             this.lblResultado.AutoSize = false;
             this.lblResultado.ForeColor = Branding.Secundario;
-            this.lblResultado.Font = new System.Drawing.Font("Segoe UI", 14F, System.Drawing.FontStyle.Bold);
-            this.lblResultado.Location = new System.Drawing.Point(375, 90);
-            this.lblResultado.Size = new System.Drawing.Size(200, 50);
+            this.lblResultado.Font = new System.Drawing.Font("Segoe UI", 15F, System.Drawing.FontStyle.Bold);
+            this.lblResultado.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.lblResultado.Location = new System.Drawing.Point(20, 340);
+            this.lblResultado.Size = new System.Drawing.Size(580, 30);
 
             this.Controls.Add(this.lblTurno);
-            this.Controls.Add(this.pnlTablero);
-            this.Controls.Add(this.lblResumenPropio);
-            this.Controls.Add(this.lblResumenRival);
+            this.Controls.Add(this.lblHeaderPropio);
+            this.Controls.Add(this.pnlTableroPropio);
+            this.Controls.Add(this.lblHeaderEnemigo);
+            this.Controls.Add(this.pnlTableroEnemigo);
             this.Controls.Add(this.lblResultado);
-            this.Size = new System.Drawing.Size(600, 400);
+            this.Size = new System.Drawing.Size(640, 420);
             this.ResumeLayout(false);
         }
     }

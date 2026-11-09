@@ -34,12 +34,22 @@ namespace GUI
             return imagen;
         }
 
+        private static readonly Dictionary<string, Image> cacheRotadas = new Dictionary<string, Image>();
+
         // Copia rotada 90° para naves colocadas en vertical (la imagen original mira a la derecha).
+        // También se cachea: al girar naves con click se pide muchas veces.
         public static Image ObtenerRotada(string nombreNave)
         {
-            Bitmap rotada = new Bitmap(Obtener(nombreNave));
-            rotada.RotateFlip(RotateFlipType.Rotate90FlipNone);
-            return rotada;
+            Image rotada;
+            if (cacheRotadas.TryGetValue(nombreNave, out rotada))
+            {
+                return rotada;
+            }
+
+            Bitmap copia = new Bitmap(Obtener(nombreNave));
+            copia.RotateFlip(RotateFlipType.Rotate90FlipNone);
+            cacheRotadas[nombreNave] = copia;
+            return copia;
         }
 
         public static Image LogoBatallaNaval()

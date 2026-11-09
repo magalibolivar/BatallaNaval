@@ -6,8 +6,19 @@ namespace BLL
     // Estadísticas de un jugador a partir de sus partidas terminadas.
     public class ESTADISTICA
     {
-        private DAL.MP_PARTIDA mapperPartida = new DAL.MP_PARTIDA();
-        private DAL.MP_USUARIO mapperUsuario = new DAL.MP_USUARIO();
+        private DAL.MP_PARTIDA mapperPartida;
+        private DAL.MP_USUARIO mapperUsuario;
+
+        public ESTADISTICA() : this(new DAL.MP_PARTIDA(), new DAL.MP_USUARIO())
+        {
+        }
+
+        // Los tests pasan mappers falsos para calcular sin base de datos.
+        internal ESTADISTICA(DAL.MP_PARTIDA mapperPartida, DAL.MP_USUARIO mapperUsuario)
+        {
+            this.mapperPartida = mapperPartida;
+            this.mapperUsuario = mapperUsuario;
+        }
 
         public BE.ESTADISTICA Calcular(BE.USUARIO usuario)
         {

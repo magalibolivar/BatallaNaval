@@ -60,7 +60,7 @@ También se pueden crear usuarios nuevos con el botón "Registrarme" de la panta
 
 1. Ingresar con el Jugador 1 (pantalla inicial).
 2. En la pantalla principal, "Ingresar Jugador 2" con **otro** usuario.
-3. "Comenzar Partida". Cada jugador coloca sus 5 naves en su propio tablero (la app pide pasar el dispositivo entre jugador y jugador, para que ninguno vea el tablero del otro mientras coloca).
+3. "Comenzar Partida". Cada jugador coloca sus 5 naves en su propio tablero (se pueden arrastrar para moverlas y girar con un click hasta presionar "Confirmar flota"; la app pide pasar el dispositivo entre jugador y jugador, para que ninguno vea el tablero del otro mientras coloca).
 4. Terminada la colocación, empieza el combate: en cada turno se dispara a una celda del tablero rival (que se ve sin revelar naves no tocadas) y se informa agua, tocado o hundido. El turno pasa siempre al otro jugador.
 5. Gana quien hunde las 5 naves del rival. También se puede abandonar con "Abandonar Partida": la gana el otro jugador.
 
@@ -80,6 +80,25 @@ Las reglas completas están en el botón "Reglas" de la app y en `Documentacion/
 
 **Nota sobre el restore:** después de restaurar, la aplicación vuelve a pedir el inicio de sesión, porque los usuarios de la base restaurada pueden ser otros.
 
+## Tests
+
+Hay dos proyectos de test (MSTest), que se ven en el Explorador de pruebas de Visual Studio:
+
+| Proyecto | Qué prueba | Necesita base |
+|---|---|---|
+| `Tests.Unitarios` | Entidades (BE), reglas de la BLL (motor de la partida, validaciones de usuario, estadísticas, bitácora) con mappers falsos, y el XML de movimientos | No |
+| `Tests.Integracion` | DAL y BLL contra SQL Server real: stored procedures, transacciones de partida + bitácora, login, estadísticas, backup/restore y la resolución del servidor | Sí |
+
+Los tests de integración **borran y vuelven a crear** la base `BATALLANAVAL` con `Script.sql` en la instancia de `Tests.Integracion/App.config` (por defecto LocalDB, `(localdb)\MSSQLLocalDB`, que viene con Visual Studio), así que no usan la base de la aplicación. Si en esa instancia ya hay una `BATALLANAVAL` que no crearon los tests, no la tocan y fallan con un aviso.
+
+Desde una consola, en la carpeta de la solución:
+
+```
+dotnet test TP_BatallaNaval.sln --collect "Code Coverage;Format=cobertura"
+```
+
+La cobertura de BE, DAL y BLL es de 99% de las líneas; quedan sin cubrir solo dos casos que dependen del servidor (la carpeta de backup por defecto, que LocalDB no informa, y que falle el `MULTI_USER` después de un restore exitoso). La GUI (Windows Forms) no tiene tests automáticos.
+
 ## Estructura
 
 ```
@@ -89,6 +108,8 @@ TP_BatallaNaval/
 ├── BLL/            reglas del juego (motor de la partida en PARTIDA.cs), estadísticas, bitácora, qué se registra en el XML
 ├── GUI/            Windows Forms (ejecutable), controles ucCelda / ucColocacion / ucCombate,
 │                   Branding.cs (paleta oficial) y Recursos/ (ícono .ico e ilustración de cada nave)
+├── Tests.Unitarios/   tests unitarios (BE, BLL con mappers falsos, XML)
+├── Tests.Integracion/ tests de integración contra SQL Server (LocalDB)
 ├── Documentacion/  reglas de negocio y decisiones de diseño
 ├── Script.sql      creación de la base, stored procedures y datos de prueba
 └── TP_BatallaNaval.sln

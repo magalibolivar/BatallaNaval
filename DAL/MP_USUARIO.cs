@@ -28,7 +28,7 @@ namespace DAL
         }
 
         // Si el usuario y la contraseña son correctos, completa el ID y devuelve true.
-        public bool Login(BE.USUARIO usuario)
+        public virtual bool Login(BE.USUARIO usuario)
         {
             acceso = new ACCESO();
             List<SqlParameter> parametros = new List<SqlParameter>();
@@ -59,7 +59,7 @@ namespace DAL
         }
 
         // Devuelve null si no existe un usuario con ese ID.
-        public BE.USUARIO BuscarPorId(int id)
+        public virtual BE.USUARIO BuscarPorId(int id)
         {
             acceso = new ACCESO();
             List<SqlParameter> parametros = new List<SqlParameter>();

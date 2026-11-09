@@ -34,11 +34,15 @@ namespace GUI
             if (jugador2 == null)
             {
                 lblJugador2.Text = "Jugador 2: (sin ingresar)";
+                lblChip2.Text = "pendiente";
+                lblChip2.ForeColor = System.Drawing.Color.FromArgb(138, 106, 156);
                 btnLoginJugador2.Text = "Ingresar Jugador 2";
             }
             else
             {
-                lblJugador2.Text = "Jugador 2: " + jugador2.Nombre + "  ✓";
+                lblJugador2.Text = "Jugador 2: " + jugador2.Nombre;
+                lblChip2.Text = "✓ activo";
+                lblChip2.ForeColor = System.Drawing.Color.FromArgb(47, 143, 91);
                 btnLoginJugador2.Text = "Cambiar Jugador 2";
             }
             btnComenzarPartida.Enabled = jugador2 != null;
