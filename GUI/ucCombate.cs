@@ -98,11 +98,12 @@ namespace GUI
                 BE.TIPONAVE tipo = BE.TIPONAVE.Flota[i];
                 int y = 4 + i * ALTO_FILA_FLOTA;
 
+                // Miniatura de lista (180×54) en un cuadro con la misma proporción.
                 PictureBox imagen = new PictureBox();
-                imagen.Location = new Point(6, y);
-                imagen.Size = new Size(44, 20);
+                imagen.Location = new Point(4, y + 3);
+                imagen.Size = new Size(47, 14);
                 imagen.SizeMode = PictureBoxSizeMode.Zoom;
-                imagen.Image = RecursosNaves.Obtener(tipo.Nombre);
+                imagen.Image = RecursosNaves.ObtenerLista(tipo.Nombre);
                 pnlFlotaRival.Controls.Add(imagen);
 
                 Label nombre = new Label();

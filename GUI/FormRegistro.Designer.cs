@@ -115,6 +115,7 @@ namespace GUI
             this.MinimizeBox = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Batalla Naval - Registrarme";
+            this.Icon = RecursosNaves.Icono();
             this.ResumeLayout(false);
         }
     }

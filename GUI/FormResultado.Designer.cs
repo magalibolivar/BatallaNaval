@@ -152,6 +152,7 @@ namespace GUI
             this.ControlBox = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Batalla Naval - Fin de la partida";
+            this.Icon = RecursosNaves.Icono();
             this.pnlResumen.ResumeLayout(false);
             this.pnlResumen.PerformLayout();
             this.ResumeLayout(false);

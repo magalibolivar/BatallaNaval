@@ -22,8 +22,6 @@ namespace GUI
         private const int ANCHO_DER = 230;
 
         private System.Windows.Forms.PictureBox picLogo;
-        private System.Windows.Forms.Label lblTituloBatalla;
-        private System.Windows.Forms.Label lblTituloNaval;
         private System.Windows.Forms.Label lblSubtitulo;
 
         private System.Windows.Forms.Label lblSeccionJugadores;
@@ -60,8 +58,6 @@ namespace GUI
         {
             this.components = new System.ComponentModel.Container();
             this.picLogo = new System.Windows.Forms.PictureBox();
-            this.lblTituloBatalla = new System.Windows.Forms.Label();
-            this.lblTituloNaval = new System.Windows.Forms.Label();
             this.lblSubtitulo = new System.Windows.Forms.Label();
             this.lblSeccionJugadores = new System.Windows.Forms.Label();
             this.pnlJugador1 = new System.Windows.Forms.Panel();
@@ -99,27 +95,18 @@ namespace GUI
             this.Font = Fuentes.Montserrat(9F);
 
             // ---------- Encabezado ----------
-            this.picLogo.Location = new System.Drawing.Point(X_IZQ, 12);
-            this.picLogo.Size = new System.Drawing.Size(75, 65);
+            // Logo completo (barco + "BATALLA NAVAL"), alineado a la izquierda.
+            this.picLogo.Location = new System.Drawing.Point(X_IZQ - 4, 14);
+            this.picLogo.Size = new System.Drawing.Size(320, 68);
             this.picLogo.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.picLogo.Image = RecursosNaves.LogoBatallaNaval();
 
-            this.lblTituloBatalla.AutoSize = true;
-            this.lblTituloBatalla.Font = Fuentes.Montserrat(13F, System.Drawing.FontStyle.Bold);
-            this.lblTituloBatalla.ForeColor = Branding.TextoPrincipal;
-            this.lblTituloBatalla.Location = new System.Drawing.Point(108, 12);
-            this.lblTituloBatalla.Text = "BATALLA";
-
-            this.lblTituloNaval.AutoSize = true;
-            this.lblTituloNaval.Font = Fuentes.Montserrat(19F, System.Drawing.FontStyle.Bold);
-            this.lblTituloNaval.ForeColor = Branding.Primario;
-            this.lblTituloNaval.Location = new System.Drawing.Point(105, 34);
-            this.lblTituloNaval.Text = "NAVAL";
-
-            this.lblSubtitulo.AutoSize = true;
+            this.lblSubtitulo.AutoSize = false;
             this.lblSubtitulo.ForeColor = Branding.Secundario;
-            this.lblSubtitulo.Location = new System.Drawing.Point(232, 50);
-            this.lblSubtitulo.Text = "2 jugadores · misma PC · tablero de 15x15";
+            this.lblSubtitulo.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.lblSubtitulo.Location = new System.Drawing.Point(X_DER, 26);
+            this.lblSubtitulo.Size = new System.Drawing.Size(ANCHO_DER, 44);
+            this.lblSubtitulo.Text = "2 jugadores";
 
             // ---------- Jugadores ----------
             this.lblSeccionJugadores.AutoSize = true;
@@ -213,8 +200,6 @@ namespace GUI
             this.AcceptButton = this.btnComenzarPartida;
             this.ClientSize = new System.Drawing.Size(640, 428);
             this.Controls.Add(this.picLogo);
-            this.Controls.Add(this.lblTituloBatalla);
-            this.Controls.Add(this.lblTituloNaval);
             this.Controls.Add(this.lblSubtitulo);
             this.Controls.Add(this.lblSeccionJugadores);
             this.Controls.Add(this.pnlJugador1);
@@ -235,6 +220,7 @@ namespace GUI
             this.MaximizeBox = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Batalla Naval";
+            this.Icon = RecursosNaves.Icono();
             this.Load += new System.EventHandler(this.FormPrincipal_Load);
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormPrincipal_FormClosing);
             ((System.ComponentModel.ISupportInitialize)(this.picLogo)).EndInit();

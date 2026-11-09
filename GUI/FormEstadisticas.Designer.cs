@@ -127,6 +127,7 @@ namespace GUI
             this.MinimizeBox = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Batalla Naval - Estadísticas";
+            this.Icon = RecursosNaves.Icono();
             this.Load += new System.EventHandler(this.FormEstadisticas_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dgvHistorial)).EndInit();
             this.ResumeLayout(false);

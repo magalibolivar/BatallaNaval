@@ -68,6 +68,7 @@ namespace GUI
             this.MinimizeBox = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Movimientos de la partida";
+            this.Icon = RecursosNaves.Icono();
             this.Load += new System.EventHandler(this.FormMovimientos_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dgvMovimientos)).EndInit();
             this.ResumeLayout(false);

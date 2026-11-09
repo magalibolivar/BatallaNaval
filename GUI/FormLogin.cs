@@ -35,8 +35,8 @@ namespace GUI
             this.usuarioNoPermitido = usuarioNoPermitido;
             this.esJugador2 = true;
             this.Text = "Batalla Naval - Ingresar Jugador 2";
-            lblTituloBatalla.Text = "JUGADOR";
-            lblTituloNaval.Text = "2";
+            lblTituloJugador.Text = "Ingresar Jugador 2";
+            lblTituloJugador.Visible = true;
             lblSubtitulo.Text = "Ingresá con un usuario distinto a " + usuarioNoPermitido + ".";
         }
 

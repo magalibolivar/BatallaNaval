@@ -13,15 +13,14 @@ namespace GUI
             base.Dispose(disposing);
         }
 
-        // Disposición (basada en el mockup de diseño): logo y
-        // título centrados, campos en recuadros redondeados con texto de ayuda adentro,
+        // Disposición (basada en el mockup de diseño): logo
+        // centrado, campos en recuadros redondeados con texto de ayuda adentro,
         // "Ingresar" y, debajo de un separador, "Jugar como invitado" y el registro.
         private const int X_CAMPOS = 40;
         private const int ANCHO_CAMPOS = 300;
 
         private System.Windows.Forms.PictureBox picLogo;
-        private System.Windows.Forms.Label lblTituloBatalla;
-        private System.Windows.Forms.Label lblTituloNaval;
+        private System.Windows.Forms.Label lblTituloJugador;
         private System.Windows.Forms.Label lblSubtitulo;
         private System.Windows.Forms.Panel pnlUsuario;
         private System.Windows.Forms.TextBox txtUsuario;
@@ -42,8 +41,7 @@ namespace GUI
         {
             this.components = new System.ComponentModel.Container();
             this.picLogo = new System.Windows.Forms.PictureBox();
-            this.lblTituloBatalla = new System.Windows.Forms.Label();
-            this.lblTituloNaval = new System.Windows.Forms.Label();
+            this.lblTituloJugador = new System.Windows.Forms.Label();
             this.lblSubtitulo = new System.Windows.Forms.Label();
             this.pnlUsuario = new System.Windows.Forms.Panel();
             this.txtUsuario = new System.Windows.Forms.TextBox();
@@ -67,32 +65,24 @@ namespace GUI
             this.BackColor = Branding.FondoVentana;
             this.Font = Fuentes.Montserrat(9F);
 
-            // ---------- Logo y título ----------
-            this.picLogo.Location = new System.Drawing.Point(140, 18);
-            this.picLogo.Size = new System.Drawing.Size(100, 78);
+            // ---------- Logo ----------
+            this.picLogo.Location = new System.Drawing.Point(25, 40);
+            this.picLogo.Size = new System.Drawing.Size(330, 90);
             this.picLogo.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.picLogo.Image = RecursosNaves.LogoBatallaNaval();
 
-            this.lblTituloBatalla.AutoSize = false;
-            this.lblTituloBatalla.Font = Fuentes.Montserrat(15F, System.Drawing.FontStyle.Bold);
-            this.lblTituloBatalla.ForeColor = Branding.TextoPrincipal;
-            this.lblTituloBatalla.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.lblTituloBatalla.Location = new System.Drawing.Point(0, 98);
-            this.lblTituloBatalla.Size = new System.Drawing.Size(380, 28);
-            this.lblTituloBatalla.Text = "BATALLA";
-
-            this.lblTituloNaval.AutoSize = false;
-            this.lblTituloNaval.Font = Fuentes.Montserrat(19F, System.Drawing.FontStyle.Bold);
-            this.lblTituloNaval.ForeColor = Branding.Primario;
-            this.lblTituloNaval.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.lblTituloNaval.Location = new System.Drawing.Point(0, 124);
-            this.lblTituloNaval.Size = new System.Drawing.Size(380, 36);
-            this.lblTituloNaval.Text = "NAVAL";
+            this.lblTituloJugador.AutoSize = false;
+            this.lblTituloJugador.Font = Fuentes.Montserrat(11F, System.Drawing.FontStyle.Bold);
+            this.lblTituloJugador.ForeColor = Branding.Primario;
+            this.lblTituloJugador.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.lblTituloJugador.Location = new System.Drawing.Point(20, 132);
+            this.lblTituloJugador.Size = new System.Drawing.Size(340, 24);
+            this.lblTituloJugador.Visible = false;
 
             this.lblSubtitulo.AutoSize = false;
             this.lblSubtitulo.ForeColor = Branding.Secundario;
             this.lblSubtitulo.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.lblSubtitulo.Location = new System.Drawing.Point(20, 162);
+            this.lblSubtitulo.Location = new System.Drawing.Point(20, 160);
             this.lblSubtitulo.Size = new System.Drawing.Size(340, 22);
             this.lblSubtitulo.Text = "Ingresá con tu usuario para jugar.";
 
@@ -191,8 +181,7 @@ namespace GUI
             this.AcceptButton = this.btnIngresar;
             this.ClientSize = new System.Drawing.Size(380, 550);
             this.Controls.Add(this.picLogo);
-            this.Controls.Add(this.lblTituloBatalla);
-            this.Controls.Add(this.lblTituloNaval);
+            this.Controls.Add(this.lblTituloJugador);
             this.Controls.Add(this.lblSubtitulo);
             this.Controls.Add(this.pnlUsuario);
             this.Controls.Add(this.pnlContraseña);
@@ -209,6 +198,7 @@ namespace GUI
             this.MinimizeBox = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Batalla Naval - Ingresar";
+            this.Icon = RecursosNaves.Icono();
             this.Load += new System.EventHandler(this.FormLogin_Load);
             ((System.ComponentModel.ISupportInitialize)(this.picLogo)).EndInit();
             this.pnlUsuario.ResumeLayout(false);

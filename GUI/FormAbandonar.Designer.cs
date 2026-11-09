@@ -77,6 +77,7 @@ namespace GUI
             this.MinimizeBox = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Abandonar partida";
+            this.Icon = RecursosNaves.Icono();
             this.ResumeLayout(false);
         }
     }

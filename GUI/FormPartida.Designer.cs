@@ -45,6 +45,7 @@ namespace GUI
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Batalla Naval - Partida en curso";
+            this.Icon = RecursosNaves.Icono();
             this.Load += new System.EventHandler(this.FormPartida_Load);
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormPartida_FormClosing);
             this.ResumeLayout(false);

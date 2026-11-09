@@ -22,6 +22,8 @@ namespace GUI
     {
         private const int TAM_CELDA = 24;
         private const int ALTO_FILA_FLOTA = 46;
+        // Donde empiezan el nombre y los casilleros de cada fila de la flota (a la derecha de la miniatura).
+        private const int X_TEXTO_FLOTA = 98;
 
         private BLL.PARTIDA partidaBLL;
         private int idJugador;
@@ -118,17 +120,18 @@ namespace GUI
                 fila.Paint += filaFlota_Paint;
                 fila.Click += filaFlota_Click;
 
+                // Miniatura de lista (180×54): se muestra en un cuadro con la misma proporción.
                 PictureBox imagen = new PictureBox();
-                imagen.Location = new Point(10, 6);
-                imagen.Size = new Size(58, 28);
+                imagen.Location = new Point(8, 8);
+                imagen.Size = new Size(80, 24);
                 imagen.SizeMode = PictureBoxSizeMode.Zoom;
-                imagen.Image = RecursosNaves.Obtener(tipo.Nombre);
+                imagen.Image = RecursosNaves.ObtenerLista(tipo.Nombre);
                 imagen.BackColor = Color.Transparent;
                 fila.Controls.Add(imagen);
 
                 Label nombre = new Label();
                 nombre.AutoSize = true;
-                nombre.Location = new Point(76, 3);
+                nombre.Location = new Point(X_TEXTO_FLOTA - 2, 3);
                 nombre.Font = new Font("Segoe UI", 9.5F, FontStyle.Bold);
                 nombre.ForeColor = Branding.TextoPrincipal;
                 nombre.BackColor = Color.Transparent;
@@ -609,9 +612,10 @@ namespace GUI
             imagen.Size = horizontal
                 ? new Size(nave.Tipo.Tamaño * TAM_CELDA, TAM_CELDA)
                 : new Size(TAM_CELDA, nave.Tipo.Tamaño * TAM_CELDA);
+            // Una sola imagen sobre todos los casilleros de la nave; la vertical ya viene girada.
             imagen.Image = horizontal
                 ? RecursosNaves.Obtener(nave.Tipo.Nombre)
-                : RecursosNaves.ObtenerRotada(nave.Tipo.Nombre);
+                : RecursosNaves.ObtenerVertical(nave.Tipo.Nombre);
             imagen.BackColor = Color.Empty;
             imagen.Cursor = Cursors.Hand;
             imagen.BringToFront();
@@ -623,7 +627,9 @@ namespace GUI
             if (!imagenesNaves.TryGetValue(nave.Tipo.Id, out imagen))
             {
                 imagen = new PictureBox();
-                imagen.SizeMode = PictureBoxSizeMode.StretchImage;
+                // Las imágenes tienen la proporción exacta de la nave (N:1); Zoom la respeta
+                // aunque el cuadro no coincidiera justo.
+                imagen.SizeMode = PictureBoxSizeMode.Zoom;
                 imagen.MouseDown += imagenNave_MouseDown;
                 imagen.MouseMove += imagenNave_MouseMove;
                 imagen.MouseUp += imagenNave_MouseUp;
@@ -702,7 +708,7 @@ namespace GUI
             {
                 for (int i = 0; i < tipo.Tamaño; i++)
                 {
-                    using (GraphicsPath casillero = Redondeado(new Rectangle(78 + i * 16, 24, 13, 9), 3))
+                    using (GraphicsPath casillero = Redondeado(new Rectangle(X_TEXTO_FLOTA + i * 16, 24, 13, 9), 3))
                     {
                         e.Graphics.FillPath(pincel, casillero);
                     }
